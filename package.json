@@ -1,0 +1,28 @@
+{
+  "name": "azure-upload-lib",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "start": "node ./src/index.js",
+    "azure-sdk": "node ./src/azure-sdk.js",
+    "azure-sdk-watch": "nodemon -w ./src/azure-sdk.js --exec 'npm run azure-sdk'",
+    "rest-api": "node ./src/azure-rest-api.js",
+    "rest-api-2": "node ./src/azure-rest-api-2.js",
+    "rest-api:dev": "nodemon -w ./src/azure-rest-api.js --exec 'npm run rest-api'",
+    "rest-api-2:dev": "nodemon -w ./src/azure-rest-api-2.js --exec 'npm run rest-api-2'",
+    "dev": "nodemon -w src/ --exec 'node ./src/index.js'"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@azure/storage-blob": "^12.0.1",
+    "axios": "^0.19.0",
+    "dotenv": "^8.2.0",
+    "fast-xml-parser": "^3.15.1",
+    "nodemon": "^2.0.2",
+    "xml2js": "^0.4.22"
+  }
+}
