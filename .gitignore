@@ -1,4 +1,5 @@
 backup/
+docs/
 examples/
 node_modules/
 .env
