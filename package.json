@@ -9,10 +9,6 @@
     "test": "jest",
     "azure-sdk": "node ./src/azure-sdk.js",
     "azure-sdk-watch": "nodemon -w ./src/azure-sdk.js --exec 'npm run azure-sdk'",
-    "rest-api": "node ./src/azure-rest-api.js",
-    "rest-api-2": "node ./src/azure-rest-api-2.js",
-    "rest-api:dev": "nodemon -w ./src/azure-rest-api.js --exec 'npm run rest-api'",
-    "rest-api-2:dev": "nodemon -w ./src/azure-rest-api-2.js --exec 'npm run rest-api-2'",
     "dev": "nodemon -w . --exec 'node ./src/index.js'",
     "jsdoc": "jsdoc --readme README.md -c jsdoc.json",
     "jsdoc:dev": "nodemon -w src --exec 'npm run jsdoc'"
