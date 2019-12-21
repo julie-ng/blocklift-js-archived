@@ -86,11 +86,14 @@ class Blockport {
 				// console.log(res.status) 201 == success
 				resolve(res.data)
 			}).catch(function (err) {
-				let data = err.response
-					? formatError(err)
-					: err
-				reject(data)
+				catchError(err, reject)
 			})
+			// }).catch(function (err) {
+			// 	let data = err.response
+			// 		? formatError(err)
+			// 		: err
+			// 	reject(data)
+			// })
 		})
 	}
 
@@ -118,6 +121,15 @@ class Blockport {
 				})
 		})
 	}
+}
+
+// Todo: put in Axios
+function catchError (err, reject) {
+	let response =  (err.response)
+		? formatError(err)
+		: err
+
+	reject(response)
 }
 
 /**
