@@ -1,33 +1,33 @@
 {
-  "name": "azure-upload-lib",
+  "name": "blockport",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "author": "Julie Ng",
+  "description": "A dead simple and developer friendly JavaScript library for handline object storage on Azure",
+  "keywords": [
+    "azure",
+    "blob",
+    "storage",
+    "blob-storage",
+    "uploads"
+  ],
+  "main": "source/blockport.js",
   "private": true,
   "scripts": {
-    "start": "node ./src/index.js",
     "test": "jest",
-    "test:watch": "nodemon -w ./src -w ./tests --exec 'npm run test'",
-    "azure-sdk": "node ./src/azure-sdk.js",
-    "azure-sdk-watch": "nodemon -w ./src/azure-sdk.js --exec 'npm run azure-sdk'",
-    "dev": "nodemon -w . --exec 'node ./src/index.js'",
-    "blockport": "node examples.js",
-    "blockport:dev": "nodemon -w examples.js -w src --exec 'npm run blockport'",
-    "jsdoc": "jsdoc --readme README.md --private -c jsdoc.json",
-    "jsdoc:dev": "nodemon -w src --exec 'npm run jsdoc'"
+    "test:watch": "nodemon -w ./source -w ./tests --exec 'npm run test'",
+    "jsdoc": "jsdoc --readme README.md -c jsdoc.json",
+    "jsdoc:dev": "nodemon -w ./source --exec 'npm run jsdoc -- --private'"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
-  "devDependencies": {
-    "@azure/storage-blob": "^12.0.1",
+  "dependencies": {
     "axios": "^0.19.0",
+    "fast-xml-parser": "^3.15.1"
+  },
+  "devDependencies": {
     "dotenv": "^8.2.0",
-    "fast-xml-parser": "^3.15.1",
     "jest": "^24.9.0",
     "jsdoc": "^3.6.3",
     "nodemon": "^2.0.2",
-    "tidy-jsdoc": "^1.1.0",
-    "xml2js": "^0.4.22"
+    "tidy-jsdoc": "^1.1.0"
   }
 }
