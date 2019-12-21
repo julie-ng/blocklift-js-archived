@@ -55,13 +55,10 @@ class Blockport {
 				method: api.method,
 				url: this._url(api.suffix)
 			}).then((res) => {
-				// console.log(res.status) 201 == success
 				resolve(res.data)
-				// let jsonObj = xmlParser.parse(res.data)
-				// let containers = jsonObj.EnumerationResults.Containers.Container
 			}).catch(function (err) {
 				let data = err.response
-					? errorResponse(err)
+					? formatError(err)
 					: err
 				reject(data)
 			})
@@ -88,11 +85,9 @@ class Blockport {
 			}).then((res) => {
 				// console.log(res.status) 201 == success
 				resolve(res.data)
-				// let jsonObj = xmlParser.parse(res.data)
-				// let containers = jsonObj.EnumerationResults.Containers.Container
 			}).catch(function (err) {
 				let data = err.response
-					? errorResponse(err)
+					? formatError(err)
 					: err
 				reject(data)
 			})
@@ -101,41 +96,6 @@ class Blockport {
 
 	/**
 	 * Lists Containers and returns a `Promise` with either data or error object, including XML responses parsed into JavaScript object format.
-	 *
-	 * #### Example Response (Success)
-	 *
-	 * ```javascript
-[
-  {
-    Name: 'container-one',
-    Properties: {
-      'Last-Modified': 'Wed, 18 Dec 2019 15:33:35 GMT',
-      Etag: '"0x8D783CFA53E3733"',
-      LeaseStatus: 'unlocked',
-      LeaseState: 'available',
-      PublicAccess: 'container',
-      DefaultEncryptionScope: '$account-encryption-key',
-      DenyEncryptionScopeOverride: false,
-      HasImmutabilityPolicy: false,
-      HasLegalHold: false
-    }
-  },
-  {
-    Name: 'container-two',
-    Properties: {
-      'Last-Modified': 'Wed, 18 Dec 2019 09:42:48 GMT',
-      Etag: '"0x8D7839EA4D4623D"',
-      LeaseStatus: 'unlocked',
-      LeaseState: 'available',
-      PublicAccess: 'blob',
-      DefaultEncryptionScope: '$account-encryption-key',
-      DenyEncryptionScopeOverride: false,
-      HasImmutabilityPolicy: false,
-      HasLegalHold: false
-    }
-  }
-]
-	 * ```
 	 *
 	 * @returns {Promise}
 	 */
@@ -147,12 +107,12 @@ class Blockport {
 				.then(function (res) {
 					let jsonObj = xmlParser.parse(res.data)
 					let containers = jsonObj.EnumerationResults.Containers.Container
-					console.log(containers)
+					// console.log(containers)
 					resolve(containers)
 				})
 				.catch(function (err) {
 					let data = err.response
-						? errorResponse(err)
+						? formatError(err)
 						: err
 					reject(data)
 				})
@@ -164,7 +124,7 @@ class Blockport {
  * @private
  * @param {Object} - Axios Error Object
  */
-function errorResponse (err) {
+function formatError (err) {
 	return {
 		status: err.response.status,
 		headers: err.response.headers,
