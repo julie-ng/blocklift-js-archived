@@ -5,8 +5,8 @@ const Blockport = require('./blockport')
 const testServiceUrl = "https://notarealaccount.blob.core.windows.net/?sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-12-19T21:33:32Z&st=2019-12-19T13:33:32Z&spr=https&sig=jb9hodlbu9kMBA9KptT%2FArgRYcY3%2BCEs4fERQIWB8Y0%3D"
 
 const containersMocks = require('../mocks/containers')
-jest.mock('axios')
 
+jest.mock('axios')
 describe ('Blockport', () => {
 	let bp
 

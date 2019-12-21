@@ -1,6 +1,6 @@
 const axios = require('axios')
-const xmlParser = require('fast-xml-parser')
-
+const catchError = require('./http-api/catch-error')
+const transformXML = require('./http-api/transform-xml')
 const restMappings = require('./http-api/mappings')
 
 /**
@@ -29,17 +29,13 @@ class Blockport {
 			this.host = parts[0]
 			this.sas = parts[1]
 		}
+
+		this.client = axios.create({
+			baseURL: this.host,
+			transformResponse: [transformXML], // to JS Objects
+		})
 	}
 
-	_url (suffix) {
-		let url = this.host + suffix
-
-		url += (this.sas)
-			? '&' + this.sas // Todo, check for '?'
-			: ''
-
-		return url
-	}
 	/**
 	 * Creates a new container
 	 *
@@ -49,19 +45,15 @@ class Blockport {
 	 * @returns {Promise}
 	 */
 	createContainer(name) {
-		const api = restMappings.container.create(name)
 		return new Promise((resolve, reject) => {
-			axios.request({
+			const api = restMappings.container.create(name)
+			this.client.request({
 				method: api.method,
 				url: this._url(api.suffix)
 			}).then((res) => {
 				resolve(res.data)
-			}).catch(function (err) {
-				let data = err.response
-					? formatError(err)
-					: err
-				reject(data)
 			})
+			.catch((err) => catchError(err, reject))
 		})
 	}
 
@@ -77,23 +69,18 @@ class Blockport {
 	deleteContainer(name) {
 		console.log(`deleteContainer(${name})`)
 
-		const api = restMappings.container.delete(name)
 		return new Promise((resolve, reject) => {
-			axios.request({
+			const api = restMappings.container.delete(name)
+			let opts = {
 				method: api.method,
 				url: this._url(api.suffix)
-			}).then((res) => {
-				// console.log(res.status) 201 == success
-				resolve(res.data)
-			}).catch(function (err) {
-				catchError(err, reject)
-			})
-			// }).catch(function (err) {
-			// 	let data = err.response
-			// 		? formatError(err)
-			// 		: err
-			// 	reject(data)
-			// })
+			}
+			this.client.request(opts)
+				.then((res) => {
+					// console.log(res.status) 201 == success
+					resolve(res.data)
+				})
+				.catch((err) => catchError(err, reject))
 		})
 	}
 
@@ -103,44 +90,38 @@ class Blockport {
 	 * @returns {Promise}
 	 */
 	listContainers() {
-		const listContainersUrl = this.serviceUrl + '&comp=list'
-
 		return new Promise((resolve, reject) => {
-			axios.get(listContainersUrl)
+			const listContainersUrl = this.serviceUrl + '&comp=list'
+			this.client.get(listContainersUrl)
 				.then(function (res) {
-					let jsonObj = xmlParser.parse(res.data)
-					let containers = jsonObj.EnumerationResults.Containers.Container
+					let containers = res.data.EnumerationResults.Containers.Container
 					// console.log(containers)
-					resolve(containers)
+					if (containers) {
+						resolve(containers)
+					} else {
+						resolve (res.data)
+					}
 				})
-				.catch(function (err) {
-					let data = err.response
-						? formatError(err)
-						: err
-					reject(data)
-				})
+				.catch((err) => catchError(err, reject))
 		})
 	}
-}
 
-// Todo: put in Axios
-function catchError (err, reject) {
-	let response =  (err.response)
-		? formatError(err)
-		: err
+	//-------- Helpers --------
 
-	reject(response)
-}
+	/**
+	 * Formats URL for axios, adding sas if necessary
+	 *
+	 * @private
+	 * @param {String} suffix
+	 * @returns {String}
+	 */
+	_url (suffix) {
+		let url = this.host + suffix
+		url += (this.sas)
+			? '&' + this.sas // Todo, check for '?'
+			: ''
 
-/**
- * @private
- * @param {Object} - Axios Error Object
- */
-function formatError (err) {
-	return {
-		status: err.response.status,
-		headers: err.response.headers,
-		data: xmlParser.parse(err.response.data)
+		return url
 	}
 }
 
