@@ -31,26 +31,60 @@ class Blockport {
 		}
 	}
 
+	_url (suffix) {
+		let url = this.host + suffix
+
+		url += (this.sas)
+			? '&' + this.sas // Todo, check for '?'
+			: ''
+
+		return url
+	}
 	/**
 	 * Creates a new container
 	 *
 	 * Note: REST API returns empty body on success.
 	 *
 	 * @param {String} name - will be transformed to lowercase
-	 * @returns {Promise} - axios object
+	 * @returns {Promise}
 	 */
 	createContainer(name) {
 		const api = restMappings.container.create(name)
-
-		let url = this.host + api.suffix
-		url += (this.sas)
-			? '&' + this.sas // Todo, check for '?'
-			: ''
-
 		return new Promise((resolve, reject) => {
 			axios.request({
 				method: api.method,
-				url: url
+				url: this._url(api.suffix)
+			}).then((res) => {
+				// console.log(res.status) 201 == success
+				resolve(res.data)
+				// let jsonObj = xmlParser.parse(res.data)
+				// let containers = jsonObj.EnumerationResults.Containers.Container
+			}).catch(function (err) {
+				let data = err.response
+					? errorResponse(err)
+					: err
+				reject(data)
+			})
+		})
+	}
+
+	/**
+	 * Delete a container
+	 *
+	 * Note: does not support leasing
+	 *
+	 * @param {String} name - container name
+	 * @returns {Promise}
+	 */
+
+	deleteContainer(name) {
+		console.log(`deleteContainer(${name})`)
+
+		const api = restMappings.container.delete(name)
+		return new Promise((resolve, reject) => {
+			axios.request({
+				method: api.method,
+				url: this._url(api.suffix)
 			}).then((res) => {
 				// console.log(res.status) 201 == success
 				resolve(res.data)
