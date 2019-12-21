@@ -1,9 +1,6 @@
-// const axios = require('axios')
-
-const HttpClient = require('./http-api/client')
-const defaultErrorHandler = require('./http-api/catch-error')
-// const transformXML = require('./http-api/transform-xml')
-const restMappings = require('./http-api/mappings')
+const HttpClient = require('./rest-api/client')
+const defaultErrorHandler = require('./rest-api/default-catch')
+const restMappings = require('./rest-api/mappings')
 
 /**
  * Blockport

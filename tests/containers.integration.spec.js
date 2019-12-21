@@ -1,5 +1,5 @@
 require('dotenv').config()
-const Blockport = require('../src/blockport')
+const Blockport = require('../source/blockport')
 
 const serviceUrl = process.env.BLOB_SERVICE_SAS_URL
 /**

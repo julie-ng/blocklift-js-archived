@@ -1,5 +1,5 @@
 const axios = require('axios')
-const transformXML = require('./xml.util')
+const transformXML = require('./xml-utils')
 
 /**
  * Custom HTTP client, configured for communicating with Azure Block Blob Storage API
@@ -14,14 +14,19 @@ class HttpClient {
 	 * @returns {axios}
 	 */
 	constructor(host) {
-		let client = axios.create({
+		const opts = {
 			baseURL: this.host,
+
+			// timeout in miliseconds
+			timeout: 10000,
 
 			// Azure returns XML but we want JavaScript Objects
 			transformResponse: [transformXML],
-		})
+		}
 
-		return client
+		this.client = axios.create(opts)
+
+		return this.client
 	}
 }
 
