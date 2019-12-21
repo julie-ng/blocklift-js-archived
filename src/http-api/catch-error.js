@@ -8,7 +8,7 @@ const xmlParser = require('fast-xml-parser')
  */
 function catchError (err, reject) {
 	let response =  (err.response)
-		? formatError(err)
+		? _formatError(err)
 		: err
 
 	reject(response)
@@ -18,10 +18,10 @@ function catchError (err, reject) {
  * Formats error, transforming XML if necessary
  *
  * @private
- * @param {Object} - Axios Error Object
+ * @param {Object} err - Axios Error Object
  */
-function formatError (err) {
-	let data = (xmlParser.validate(data) === true)
+function _formatError (err) {
+	let data = (xmlParser.validate(err.response.data) === true)
 		? xmlParser.parse(err.response.data)
 		: err.response.data
 

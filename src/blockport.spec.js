@@ -31,7 +31,7 @@ describe ('Blockport', () => {
 	})
 
 	describe ('Containers', () => {
-		describe ('listContainers()', () => {
+		xdescribe ('listContainers()', () => {
 			it ('can list containers', () => {
 				axios.get.mockResolvedValue({
 					data: containersMocks.list.xml

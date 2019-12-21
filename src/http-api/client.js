@@ -1,30 +1,28 @@
-// const client = axios.create({
-//   baseURL: 'https://some-domain.com/api/',
-//   timeout: 1000,
-//   headers: {'X-Custom-Header': 'foobar'}
-// })
+const axios = require('axios')
+const transformXML = require('./xml.util')
 
+/**
+ * Custom HTTP client, configured for communicating with Azure Block Blob Storage API
+ *
+ * @private
+ */
+class HttpClient {
 
-// module.exports = client
+	/**
+	 *
+	 * @param {String} host
+	 * @returns {axios}
+	 */
+	constructor(host) {
+		let client = axios.create({
+			baseURL: this.host,
 
+			// Azure returns XML but we want JavaScript Objects
+			transformResponse: [transformXML],
+		})
 
-// /**
-//  * API Request Wrapper
-//  *
-//  * Required Headers per API docs
-//  * - Authorization
-//  * - Date
-//  *
-//  *
-//  * Optional Headers
-//  * x-ms=version
-//  *
-//  * @private
-//  */
-// class HttpClient {
-// 	constructor() {
+		return client
+	}
+}
 
-// 	}
-// }
-
-// module.exports = HttpClient
+module.exports = HttpClient

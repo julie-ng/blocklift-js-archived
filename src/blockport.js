@@ -1,6 +1,8 @@
-const axios = require('axios')
-const catchError = require('./http-api/catch-error')
-const transformXML = require('./http-api/transform-xml')
+// const axios = require('axios')
+
+const HttpClient = require('./http-api/client')
+const defaultErrorHandler = require('./http-api/catch-error')
+// const transformXML = require('./http-api/transform-xml')
 const restMappings = require('./http-api/mappings')
 
 /**
@@ -30,10 +32,13 @@ class Blockport {
 			this.sas = parts[1]
 		}
 
-		this.client = axios.create({
-			baseURL: this.host,
-			transformResponse: [transformXML], // to JS Objects
+		this.client = new HttpClient({
+			baseURL: this.host
 		})
+		// this.client = axios.create({
+		// 	baseURL: this.host,
+		// 	transformResponse: [transformXML], // to JS Objects
+		// })
 	}
 
 	/**
@@ -51,9 +56,14 @@ class Blockport {
 				method: api.method,
 				url: this._url(api.suffix)
 			}).then((res) => {
-				resolve(res.data)
+				resolve({
+					status: res.status,
+					statusText: res.statusText,
+					containerName: name,
+					headers: res.headers
+				})
 			})
-			.catch((err) => catchError(err, reject))
+			.catch((err) => defaultErrorHandler(err, reject))
 		})
 	}
 
@@ -77,10 +87,17 @@ class Blockport {
 			}
 			this.client.request(opts)
 				.then((res) => {
+					// console.log('delete response', res)
 					// console.log(res.status) 201 == success
-					resolve(res.data)
+					// resolve(res.data)
+
+					resolve({
+						status: 202,
+						statusText: 'Accepted',
+						containerName: name
+					})
 				})
-				.catch((err) => catchError(err, reject))
+				.catch((err) => defaultErrorHandler(err, reject))
 		})
 	}
 
@@ -102,7 +119,7 @@ class Blockport {
 						resolve (res.data)
 					}
 				})
-				.catch((err) => catchError(err, reject))
+				.catch((err) => defaultErrorHandler(err, reject))
 		})
 	}
 
