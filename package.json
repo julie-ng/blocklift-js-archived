@@ -13,7 +13,7 @@
     "dev": "nodemon -w . --exec 'node ./src/index.js'",
     "blockport": "node examples.js",
     "blockport:dev": "nodemon -w examples.js -w src --exec 'npm run blockport'",
-    "jsdoc": "jsdoc --readme README.md -c jsdoc.json",
+    "jsdoc": "jsdoc --readme README.md --private -c jsdoc.json",
     "jsdoc:dev": "nodemon -w src --exec 'npm run jsdoc'"
   },
   "keywords": [],
