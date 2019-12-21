@@ -3,6 +3,7 @@ const xmlParser = require('fast-xml-parser')
 /**
  * Response Data from XML to JS Object
  *
+ * @private
  * @param {String} data
  * @returns {Object} data
  */
