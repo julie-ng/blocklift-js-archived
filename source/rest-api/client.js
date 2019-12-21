@@ -1,5 +1,5 @@
 const axios = require('axios')
-const transformXML = require('./xml-utils')
+const transformXML = require('./xml-helper')
 
 /**
  * Custom HTTP client, configured for communicating with Azure Block Blob Storage API
