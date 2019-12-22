@@ -32,11 +32,8 @@ class Blocklift {
 		this.client = new HttpClient({
 			baseURL: this.host
 		})
-		// this.client = axios.create({
-		// 	baseURL: this.host,
-		// 	transformResponse: [transformXML], // to JS Objects
-		// })
 	}
+
 
 	/**
 	 * Creates a new container
@@ -84,10 +81,6 @@ class Blocklift {
 			}
 			this.client.request(opts)
 				.then((res) => {
-					// console.log('delete response', res)
-					// console.log(res.status) 201 == success
-					// resolve(res.data)
-
 					resolve({
 						status: 202,
 						statusText: 'Accepted',
