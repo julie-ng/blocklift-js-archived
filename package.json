@@ -19,7 +19,8 @@
     "lint:fix": "eslint --fix .",
     "lint:watch": "nodemon -w source -w tests -w mocks --exec 'npm run lint'",
     "jsdoc": "jsdoc --readme README.md -c jsdoc.json",
-    "jsdoc:dev": "nodemon -w ./source --exec 'npm run jsdoc -- --private'"
+    "jsdoc:dev": "nodemon -w ./source --exec 'npm run jsdoc -- --private'",
+    "preflight": "npm run lint && npm run test && npm audit"
   },
   "license": "ISC",
   "dependencies": {
