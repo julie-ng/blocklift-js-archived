@@ -1,5 +1,6 @@
 backup/
 docs/
+coverage/
 examples/
 node_modules/
 .env
