@@ -13,8 +13,9 @@
   "main": "source/blockport.js",
   "private": true,
   "scripts": {
-    "test": "jest",
-    "test:watch": "nodemon -w ./source -w ./tests --exec 'npm run test'",
+    "test:unit": "jest source --verbose",
+    "test:unit:watch": "nodemon -w ./source --exec 'npm run test:unit'",
+    "test:integration": "jest integration",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "lint:watch": "nodemon -w source -w tests -w mocks --exec 'npm run lint'",
