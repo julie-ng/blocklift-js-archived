@@ -1,4 +1,4 @@
-const Blockport = require('./blockport')
+const Blocklift = require('./blocklift')
 const HttpClient = require('./rest-api/client')
 
 const mockRequest = jest.fn()
@@ -13,13 +13,13 @@ const containersMocks = require('../mocks/containers')
 // Mock Service URL with SAS (expired)
 const testServiceUrl = "https://notarealaccount.blob.core.windows.net/?sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-12-19T21:33:32Z&st=2019-12-19T13:33:32Z&spr=https&sig=jb9hodlbu9kMBA9KptT%2FArgRYcY3%2BCEs4fERQIWB8Y0%3D"
 
-describe ('Blockport', () => {
-	let bp
+describe ('Blocklift', () => {
+	let lift
 
 	beforeEach(() => {
 		HttpClient.mockClear()
 
-		bp = new Blockport({
+		lift = new Blocklift({
 			serviceUrl: testServiceUrl
 		})
 	})
@@ -27,15 +27,15 @@ describe ('Blockport', () => {
 	describe ('Constructor', () => {
 
 		it ('sets `serviceUrl` property', () => {
-			expect(bp.serviceUrl).toEqual(testServiceUrl)
+			expect(lift.serviceUrl).toEqual(testServiceUrl)
 		})
 
 		it ('sets `host` property', () => {
-			expect(bp.host).toEqual('https://notarealaccount.blob.core.windows.net/')
+			expect(lift.host).toEqual('https://notarealaccount.blob.core.windows.net/')
 		})
 
 		it ('sets `sas` property', () => {
-			expect(bp.sas).toEqual('sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-12-19T21:33:32Z&st=2019-12-19T13:33:32Z&spr=https&sig=jb9hodlbu9kMBA9KptT%2FArgRYcY3%2BCEs4fERQIWB8Y0%3D')
+			expect(lift.sas).toEqual('sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-12-19T21:33:32Z&st=2019-12-19T13:33:32Z&spr=https&sig=jb9hodlbu9kMBA9KptT%2FArgRYcY3%2BCEs4fERQIWB8Y0%3D')
 		})
 
 		it ('instantiates a `HttpClient`', () => {
@@ -50,9 +50,9 @@ describe ('Blockport', () => {
 					data: containersMocks.list.xmlObject
 				}
 
-				bp.client.request.mockImplementationOnce(() => Promise.resolve(mockResponse))
+				lift.client.request.mockImplementationOnce(() => Promise.resolve(mockResponse))
 
-				return bp.listContainers().then((data)=> {
+				return lift.listContainers().then((data)=> {
 					expect(data).toEqual(containersMocks.list.object)
 					done()
 				})

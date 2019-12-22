@@ -1,5 +1,5 @@
 {
-  "name": "blockport",
+  "name": "blocklift",
   "version": "0.1.0",
   "author": "Julie Ng",
   "description": "A dead simple and developer friendly JavaScript library for handline object storage on Azure",
@@ -10,7 +10,7 @@
     "blob-storage",
     "uploads"
   ],
-  "main": "source/blockport.js",
+  "main": "source/blocklift.js",
   "private": true,
   "scripts": {
     "test:unit": "jest source --verbose",

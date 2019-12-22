@@ -1,4 +1,4 @@
-# blockport
+# blocklift
 
 A dead simple and developer friendly JavaScript library for handline object storage on Azure
 
@@ -7,7 +7,7 @@ A dead simple and developer friendly JavaScript library for handline object stor
 ### List Containers
 
 ```javascript
-blockport.listContainers()
+blocklift.listContainers()
 	.then((data) => console.log(data))
 	.catch((err) => console.error(err))
 ```

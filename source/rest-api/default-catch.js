@@ -1,7 +1,7 @@
 const xmlParser = require('fast-xml-parser')
 
 /**
- * Formats axios errors before passing to blockport client
+ * Formats axios errors before passing to blocklift client
  *
  * @param {Object} err - axios error object
  * @param {function} reject

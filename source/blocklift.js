@@ -3,17 +3,17 @@ const defaultErrorHandler = require('./rest-api/default-catch')
 const restMappings = require('./rest-api/mappings')
 
 /**
- * Blockport
+ * Blocklift
  *
  * #### Example - List Container
  *
  * ```javascript
-blockport.listContainers()
+blocklift.listContainers()
 	.then((data) => console.log(data))
 	.catch((err) => console.error(err))
  * ```
  */
-class Blockport {
+class Blocklift {
 
 	/**
 	 *
@@ -143,4 +143,4 @@ class Blockport {
 	}
 }
 
-module.exports = Blockport
+module.exports = Blocklift
