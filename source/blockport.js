@@ -46,7 +46,7 @@ class Blockport {
 	 * @param {String} name - will be transformed to lowercase
 	 * @returns {Promise}
 	 */
-	createContainer(name) {
+	createContainer (name) {
 		return new Promise((resolve, reject) => {
 			const api = restMappings.container.create(name)
 			this.client.request({
@@ -73,7 +73,7 @@ class Blockport {
 	 * @returns {Promise}
 	 */
 
-	deleteContainer(name) {
+	deleteContainer (name) {
 		// console.log(`deleteContainer(${name})`)
 
 		return new Promise((resolve, reject) => {
@@ -103,7 +103,7 @@ class Blockport {
 	 *
 	 * @returns {Promise}
 	 */
-	listContainers() {
+	listContainers () {
 		return new Promise((resolve, reject) => {
 			const api = restMappings.container.list()
 			let opts = {
@@ -124,7 +124,7 @@ class Blockport {
 		})
 	}
 
-	//-------- Helpers --------
+	// -------- Helpers --------
 
 	/**
 	 * Formats URL for axios, adding sas if necessary

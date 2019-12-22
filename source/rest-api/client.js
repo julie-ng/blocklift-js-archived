@@ -13,7 +13,7 @@ class HttpClient {
 	 * @param {String} host
 	 * @returns {axios instance}
 	 */
-	constructor(host) {
+	constructor (host) {
 		const opts = {
 			baseURL: this.host,
 

@@ -1,12 +1,11 @@
-const axios = require('axios')
 const Blockport = require('./blockport')
 const HttpClient = require('./rest-api/client')
 
 const mockRequest = jest.fn()
 jest.mock('./rest-api/client', () => {
-  return jest.fn().mockImplementation(() => {
-    return { request: mockRequest }
-  })
+	return jest.fn().mockImplementation(() => {
+		return { request: mockRequest }
+	})
 })
 
 const containersMocks = require('../mocks/containers')
