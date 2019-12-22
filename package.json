@@ -13,6 +13,7 @@
   "main": "source/blocklift.js",
   "private": true,
   "scripts": {
+    "dev": "nodemon -w dev.js -w source --exec 'node dev.js'",
     "test:unit": "jest source --verbose",
     "test:unit:watch": "nodemon -w ./source --exec 'npm run test:unit'",
     "test:integration": "jest integration",
