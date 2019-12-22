@@ -74,7 +74,7 @@ class Blockport {
 	 */
 
 	deleteContainer(name) {
-		console.log(`deleteContainer(${name})`)
+		// console.log(`deleteContainer(${name})`)
 
 		return new Promise((resolve, reject) => {
 			const api = restMappings.container.delete(name)
@@ -105,11 +105,15 @@ class Blockport {
 	 */
 	listContainers() {
 		return new Promise((resolve, reject) => {
-			const listContainersUrl = this.serviceUrl + '&comp=list'
-			this.client.get(listContainersUrl)
+			const api = restMappings.container.list()
+			let opts = {
+				method: api.method,
+				url: this._url(api.suffix)
+			}
+
+			this.client.request(opts)
 				.then(function (res) {
 					let containers = res.data.EnumerationResults.Containers.Container
-					// console.log(containers)
 					if (containers) {
 						resolve(containers)
 					} else {

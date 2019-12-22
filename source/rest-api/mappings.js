@@ -1,6 +1,6 @@
 const containerMappings = {
 
-	list: function (name) {
+	list: function () {
 		return {
 			method: 'GET',
 			suffix: `?comp=list`

@@ -11,7 +11,7 @@ class HttpClient {
 	/**
 	 *
 	 * @param {String} host
-	 * @returns {axios}
+	 * @returns {axios instance}
 	 */
 	constructor(host) {
 		const opts = {
