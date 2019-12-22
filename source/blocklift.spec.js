@@ -70,4 +70,10 @@ describe ('Blocklift', () => {
 			test.todo ('can delete a container')
 		})
 	})
+
+	// describe ('Blobs', () => {
+	// 	describe ('listBlobs()', () => {
+
+	// 	})
+	// })
 })

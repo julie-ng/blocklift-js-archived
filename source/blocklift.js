@@ -34,6 +34,7 @@ class Blocklift {
 		})
 	}
 
+	// -------- Containers --------
 
 	/**
 	 * Creates a new container
@@ -112,6 +113,27 @@ class Blocklift {
 					} else {
 						resolve (res.data)
 					}
+				})
+				.catch((err) => defaultErrorHandler(err, reject))
+		})
+	}
+
+	// -------- Blobs --------
+
+	listBlobs (containerName = '') {
+		return new Promise((resolve, reject) => {
+			const api = restMappings.blob.list(containerName)
+			let opts = {
+				method: api.method,
+				url: this._url(api.suffix)
+			}
+			this.client.request(opts)
+				.then((res) => {
+					const blobs = res.data.EnumerationResults.Blobs.Blob
+					const result = blobs
+						? blobs
+						: res.data
+					resolve(result)
 				})
 				.catch((err) => defaultErrorHandler(err, reject))
 		})
