@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EnumerationResults ServiceEndpoint="https://enterpriseuploadspoc.blob.core.windows.net/">
+	<Containers>
+		<Container>
+			<Name>blob-read-anon</Name>
+			<Properties>
+				<Last-Modified>Wed, 18 Dec 2019 15:32:59 GMT</Last-Modified>
+				<Etag>"0x8D783CF900A782C"</Etag>
+				<LeaseStatus>unlocked</LeaseStatus>
+				<LeaseState>available</LeaseState>
+				<PublicAccess>blob</PublicAccess>
+				<DefaultEncryptionScope>$account-encryption-key</DefaultEncryptionScope>
+				<DenyEncryptionScopeOverride>false</DenyEncryptionScopeOverride>
+				<HasImmutabilityPolicy>false</HasImmutabilityPolicy>
+				<HasLegalHold>false</HasLegalHold>
+			</Properties>
+		</Container>
+	</Containers>
+	<NextMarker />
+</EnumerationResults>

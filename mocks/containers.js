@@ -1,20 +1,24 @@
-const fs = require('fs')
-const path = require('path')
 const xmlParser = require('fast-xml-parser')
+const helper = require('./helper')
+const XMLList = helper.readXML('./xml/containers-list.xml')
+const XMLSingle = helper.readXML('./xml/containers-single.xml')
 
-const xml = fs
-	.readFileSync(path.join(__dirname, 'containers-list.xml'))
-	.toString()
-	.replace(/[\t\n\r]/gm,'')
+const containers = {
+	xml: {
+		list: XMLList,
+		single: XMLSingle
+	},
+
+	obj: {
+		list: xmlParser.parse(XMLList),
+		single: xmlParser.parse(XMLSingle)
+	}
+}
 
 module.exports = {
-	list: {
-		object: require('./containers-list'),
-
-		// axios resolves body as a string
-		xmlString: xml,
-
-		// mock axios transformed request
-		xmlObject: xmlParser.parse(xml)
+	...containers,
+	parsed: {
+		list: containers.obj.list.EnumerationResults.Containers.Container,
+		single: containers.obj.single.EnumerationResults.Containers.Container
 	}
 }
