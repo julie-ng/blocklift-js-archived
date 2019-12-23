@@ -22,15 +22,30 @@ class Blocklift {
 	constructor (opts = {}) {
 		if (opts.serviceUrl === undefined) {
 			throw '`serviceUrl` required'
-		} else {
-			this.serviceUrl = opts.serviceUrl
-			let parts = opts.serviceUrl.split('?')
-			this.host = parts[0]
-			this.sas = parts[1]
 		}
 
+		// this.serviceUrl = opts.serviceUrl
+		// let parts = opts.serviceUrl.split('?')
+		// this.host = parts[0]
+		// this.sas = parts[1]
+		// console.log('parts', parts)
+
+
+		// let urlParams = new URLSearchParams(parts[1])
+		// // console.log('sasParts', sasParts)
+		// // for (let p of urlParams) {
+		// // 	console.log(p)
+		// // }
+
+		// console.log('urlParams', urlParams)
+
+
+		// this.client = new HttpClient(this.host, {
+		// 	urlParams: urlParams
+		// })
+
 		this.client = new HttpClient({
-			baseURL: this.host
+			serviceUrl: opts.serviceUrl
 		})
 	}
 
@@ -98,23 +113,41 @@ class Blocklift {
 	 * @returns {Promise}
 	 */
 	listContainers () {
+		console.log('hello world')
+
 		return new Promise((resolve, reject) => {
 			const api = restMappings.container.list()
+			// console.log('api', api)
+
 			let opts = {
 				method: api.method,
-				url: this._url(api.suffix)
+				params: api.params,
+				url: api.path
+				// url: this._url(api.suffix)
 			}
 
 			this.client.request(opts)
 				.then(function (res) {
+					// console.log('--------')
+					// console.log(res)
+					// console.log('--------')
+
 					let containers = res.data.EnumerationResults.Containers.Container
 					if (containers) {
 						resolve(containers)
 					} else {
+						// console.log('--------')
+						// console.log(res.request)
+						// console.log('--------')
 						resolve (res.data)
 					}
 				})
-				.catch((err) => defaultErrorHandler(err, reject))
+				.catch((err) => {
+					console.log('----err----')
+					console.log(err.request.path)
+					console.log('--------')
+					defaultErrorHandler(err, reject)
+				})
 		})
 	}
 
