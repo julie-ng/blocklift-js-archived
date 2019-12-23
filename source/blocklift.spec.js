@@ -25,17 +25,16 @@ describe ('Blocklift', () => {
 	})
 
 	describe ('Constructor', () => {
-
-		it ('sets `serviceUrl` property', () => {
-			expect(lift.serviceUrl).toEqual(testServiceUrl)
+		it ('defaults `defaultContainer` property to false', () => {
+			expect(lift.defaultContainer).toBe(false)
 		})
 
-		it ('sets `host` property', () => {
-			expect(lift.host).toEqual('https://notarealaccount.blob.core.windows.net/')
-		})
-
-		it ('sets `sas` property', () => {
-			expect(lift.sas).toEqual('sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-12-19T21:33:32Z&st=2019-12-19T13:33:32Z&spr=https&sig=jb9hodlbu9kMBA9KptT%2FArgRYcY3%2BCEs4fERQIWB8Y0%3D')
+		it ('can set `defaultContainer` property', () => {
+			let b = new Blocklift({
+				serviceUrl: testServiceUrl,
+				defaultContainer: 'hello'
+			})
+			expect(b.defaultContainer).toEqual('hello')
 		})
 
 		it ('instantiates a `HttpClient`', () => {

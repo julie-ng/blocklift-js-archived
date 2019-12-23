@@ -24,6 +24,8 @@ class Blocklift {
 			throw '`serviceUrl` required'
 		}
 
+		this.defaultContainer = opts.defaultContainer || false
+
 		this.client = new HttpClient({
 			serviceUrl: opts.serviceUrl
 		})
@@ -109,9 +111,42 @@ class Blocklift {
 
 	// -------- Blobs --------
 
-	listBlobs (containerName = '') {
+	/**
+	 * List Blobs in a container
+	 *
+	 * @param {String} [containerName]
+	 */
+	listBlobs (containerName) {
 		return new Promise((resolve, reject) => {
-			const api = restMappings.blob.list(containerName)
+			const container = containerName || this.defaultContainer
+			const api = restMappings.blob.list(container)
+			this.client.request(api)
+				.then((res) => {
+					const blobs = res.data.EnumerationResults.Blobs.Blob
+					let data = blobs
+						? blobs
+						: res.data
+
+					// always return an Array
+					if (blobs && !Array.isArray(data)) {
+						data = [data]
+					}
+					resolve(data)
+				})
+				.catch((err) => defaultErrorHandler(err, reject))
+		})
+	}
+
+	/**
+	 * Upload Blob File
+	 *
+	 * @param {String} filename
+	 * @param {String} opts.container
+	 */
+	uploadBlob (filename, opts = {}) {
+		return new Promise((resolve, reject) => {
+			const container = opts.container || this.defaultContainer
+			const api = restMappings.blob.create(container)
 			this.client.request(api)
 				.then((res) => {
 					const blobs = res.data.EnumerationResults.Blobs.Blob
