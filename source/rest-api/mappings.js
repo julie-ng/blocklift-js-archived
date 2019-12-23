@@ -13,7 +13,7 @@ const containerMappings = {
 	create: function (name) {
 		return {
 			method: 'PUT',
-			suffix: `${name}?restype=container`,
+			path: name,
 			params: {
 				restype: 'container'
 			}
@@ -23,7 +23,7 @@ const containerMappings = {
 	delete: function (name) {
 		return {
 			method: 'DELETE',
-			suffix: `${name}?restype=container`,
+			path: name,
 			params: {
 				restype: 'container'
 			}
@@ -35,7 +35,7 @@ const blobMappings = {
 	list: function (container) {
 		return {
 			method: 'GET',
-			suffix: `${container}?restype=container&comp=list`,
+			path: container,
 			params: {
 				restype: 'container',
 				comp: 'list'
@@ -46,21 +46,21 @@ const blobMappings = {
 	create: function (nameWithContainer) {
 		return {
 			method: 'PUT',
-			suffix: `${nameWithContainer}`
+			path: nameWithContainer
 		}
 	},
 
 	delete: function (nameWithContainer) {
 		return {
 			method: 'DELETE',
-			suffix: `${nameWithContainer}`
+			path: nameWithContainer
 		}
 	},
 
 	createSnapshot: function (nameWithContainer, id) {
 		return {
 			method: 'PUT',
-			suffix: `${nameWithContainer}?comp=snapshot`,
+			path: nameWithContainer,
 			params: {
 				comp: 'snapshot'
 			}
@@ -70,14 +70,13 @@ const blobMappings = {
 	deleteSnapshot: function (nameWithContainer, id) {
 		return {
 			method: 'DELETE',
-			suffix: `${nameWithContainer}?snapshot=${id}`,
+			path: nameWithContainer,
 			params: {
 				snapshot: id
 			}
 		}
 	}
 }
-
 
 module.exports = {
 	container: containerMappings,
