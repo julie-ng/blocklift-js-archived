@@ -43,8 +43,7 @@ describe.only ('URL', () => {
 		})
 
 		it ('can base chained', () => {
-			u.append('a=b')
-			 .append('c=d')
+			u.append('a=b').append('c=d')
 			expect(u.url).toEqual('base?a=b&c=d')
 		})
 
