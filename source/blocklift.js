@@ -96,6 +96,11 @@ class Blocklift {
 					let data = (containers)
 						? containers
 						: res.data
+
+					// always return an Array
+					if (containers && !Array.isArray(data)) {
+						data = [data]
+					}
 					resolve(data)
 				})
 				.catch(err => defaultErrorHandler(err, reject))

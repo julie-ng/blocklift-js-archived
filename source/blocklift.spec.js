@@ -46,14 +46,19 @@ describe ('Blocklift', () => {
 	describe ('Containers', () => {
 		describe ('listContainers()', () => {
 			it ('can list containers', (done) => {
-				const mockResponse = {
-					data: containersMocks.list.xmlObject
-				}
-
+				const mockResponse = { data: containersMocks.obj.list }
 				lift.client.request.mockImplementationOnce(() => Promise.resolve(mockResponse))
-
 				return lift.listContainers().then((data)=> {
-					expect(data).toEqual(containersMocks.list.object)
+					expect(data).toEqual(containersMocks.parsed.list)
+					done()
+				})
+			})
+
+			it ('always returns array if only 1 result', (done) => {
+				const mockResponse = { data: containersMocks.obj.single }
+				lift.client.request.mockImplementationOnce(() => Promise.resolve(mockResponse))
+				return lift.listContainers().then((data)=> {
+					expect(data).toEqual([containersMocks.parsed.single])
 					done()
 				})
 			})
