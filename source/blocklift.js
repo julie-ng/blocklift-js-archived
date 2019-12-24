@@ -3,19 +3,17 @@ const defaultErrorHandler = require('./rest-api/default-catch')
 const restMappings = require('./rest-api/mappings')
 
 /**
- * Blocklift
+ * The Blocklift class is a wrapper around HTTP client, that formats raw Azure responses to be more developer friendly.
+ * Blocklift always returns `Object`s instead of raw XML `String`s.
  *
- * #### Example - List Container
+ * For example list functions _always_ return `Array`s, even if there is only one result.
  *
- * ```javascript
-blocklift.listContainers()
-	.then((data) => console.log(data))
-	.catch((err) => console.error(err))
- * ```
+ * @property {String} [defaultContainer] - when specified, this is always prepended to Blob operations.
  */
 class Blocklift {
 
 	/**
+	 * Constructor
 	 *
 	 * @param {String} opts.serviceUrl - Blob Service URL, which can be Shared Access Signature (SAS) Url
 	 */
@@ -36,12 +34,25 @@ class Blocklift {
 	/**
 	 * Creates a new container
 	 *
-	 * Note: REST API returns empty body on success.
+	 * Whereas the Azure REST API returns empty body on successful creation,
+	 * the `createContainer('myname')` method returns the following response format:
 	 *
-	 * @param {String} name - will be transformed to lowercase
+	 * ```javascript
+	 * {
+	 * 	status: 201,
+	 * 	statusText: Created,
+	 * 	containerName: 'myname',
+	 * 	headers: {…}
+ 	 * }
+	 * ```
+	 *
+	 * where `headers` are the server response headers.
+	 *
+	 * @param {String} name - will be transformed to lowercase per Azure requirements
 	 * @returns {Promise}
 	 */
 	createContainer (name) {
+		name = name.toLowerCase()
 		return new Promise((resolve, reject) => {
 			const api = restMappings.container.create(name)
 			this.client.request(api)
@@ -84,7 +95,13 @@ class Blocklift {
 	}
 
 	/**
-	 * Lists Containers and returns a `Promise` with either data or error object, including XML responses parsed into JavaScript object format.
+	 * Lists all containers in your storage account (as determined by host name) and returns a `Promise` with either data or error object, including XML responses parsed into JavaScript object format.
+	 *
+   * @example
+ 	 *
+	 * blocklift.listContainers()
+	 *	.then((data) => console.log(data))
+	 *	.catch((err) => console.error(err))
 	 *
 	 * @returns {Promise}
 	 */
@@ -112,9 +129,11 @@ class Blocklift {
 	// -------- Blobs --------
 
 	/**
-	 * List Blobs in a container
+	 * List Blobs in a container or `defaultContainer` if none is provided.
 	 *
 	 * @param {String} [containerName]
+	 * @return {Promise<Array>} list of blobs
+	 * @return {Promise<Object>} Error
 	 */
 	listBlobs (containerName) {
 		return new Promise((resolve, reject) => {

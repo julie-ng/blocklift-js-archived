@@ -11,21 +11,24 @@ const defaultConfig = {
 }
 
 /**
- * Custom HTTP client, configured for communicating with Azure Block Blob Storage API
+ * Custom HTTP client,
+ * configured for communicating with Azure Block Blob Storage API
  *
  * @private
+ * @property {axios} axios - axios instance with preconfigured defaults used to make requests
  */
 class HttpClient {
 
 	/**
+	 * Constructor
 	 *
-	 * Note: serviceUrl is required
+	 * Because of an axios bug that changes query param encoding, this custom client
+	 * just appends SAS token to end of a URL. This is a temporary compromise.
 	 *
 	 * @param {Object} opts - options object
-	 * @param {String} opts.serviceUrl - Blob Storage service URL
+	 * @param {String} opts.serviceUrl - Blob Storage service URL, any query params attached are assumed to be the SAS token.
 	 * @param {Integer} [opts.timeout=100000] - query string
-	 * @param {URLSearchParams} opts.urlParams - query string
-	 * @returns {axios instance}
+	 * @returns {HttpClient}
 	 */
 	constructor (opts = {}) {
 		let parts = opts.serviceUrl.split('?')
@@ -46,6 +49,14 @@ class HttpClient {
 		return this
 	}
 
+	/**
+	 * Makes HTTP Requests
+	 *
+	 * @param {Object} api - options object
+	 * @param {String} api.method - HTTP method, e.g. GET, PUT, DELETE
+	 * @param {String} api.path - HTTP path without host to send the request
+	 * @param {String|Object} api.params - optional params
+	 */
 	request (api) {
 		let url = new URL(api.path)
 

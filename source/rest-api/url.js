@@ -1,13 +1,29 @@
+/**
+ * Custom URL Builder
+ *
+ * @property {String} url
+ */
 class URL {
-	constructor (str) {
-		this.url = str
+
+	/**
+	 * Constructor
+	 *
+	 * @param {String} url - base URL, preferably without any query parameters
+	 */
+	constructor (url) {
+		this.url = url
 	}
 
+	/**
+	 * Appends params to URL, in the form of a string `id=123` or  an object `{ id: 123 }`,
+	 * adding `?` and `&` operators as needed.
+	 *
+	 * @param {String|Object} toAdd
+	 */
 	append (toAdd) {
 		let base = this.url
 
 		if (!hasQ(base)) {
-			// console.log('what base', base)
 			base += '?'
 		} else if (!endsWith(base, '?') && !endsWith(base, '&')) {
 			base += '&'
