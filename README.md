@@ -1,6 +1,6 @@
-# blocklift
+# Blocklift.js
 
-A dead simple and developer friendly JavaScript library for handline object storage on Azure
+A dead simple and developer friendly JavaScript library for handling object storage on Azure.
 
 ## Examples
 
