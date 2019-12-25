@@ -1,5 +1,10 @@
 # To Do
 
+## Blocklift
+
+- [x] add default container property on client
+- [x] move `sas` url suffix to client
+
 ## Containers
 
 ### Prioritized
@@ -21,11 +26,12 @@
 
 ### Prioritized
 
-- [ ] list
+- [x] list
 - [ ] create
 - [ ] delete
 - [ ] replace?
 - [ ] multipart upload
+- [ ] generate read-only sas url
 
 ### Later
 
