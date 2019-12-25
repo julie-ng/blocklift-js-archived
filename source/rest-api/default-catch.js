@@ -7,11 +7,17 @@ const xmlParser = require('fast-xml-parser')
  * @param {function} reject
  */
 function catchError (err, reject) {
+	const request = {
+		method: err.request.method,
+		path: err.request.path,
+		headers: err.request._headerSent
+	}
+
 	let response =  (err.response)
 		? _formatError(err)
 		: err
 
-	reject(response)
+	reject({...response, _request: request })
 }
 
 /**
@@ -27,6 +33,7 @@ function _formatError (err) {
 
 	return {
 		status: err.response.status,
+		statusText: err.response.statusText,
 		headers: err.response.headers,
 		data: data
 	}
