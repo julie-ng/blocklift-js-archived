@@ -1,3 +1,4 @@
+const Blob = require('./blob')
 const HttpClient = require('./rest-api/client')
 const defaultErrorHandler = require('./rest-api/default-catch')
 const restMappings = require('./rest-api/mappings')
@@ -24,9 +25,7 @@ class Blocklift {
 
 		this.defaultContainer = opts.defaultContainer || false
 
-		this.client = new HttpClient({
-			serviceUrl: opts.serviceUrl
-		})
+		this.client = new HttpClient(opts)
 	}
 
 	// -------- Containers --------
@@ -159,20 +158,33 @@ class Blocklift {
 	/**
 	 * Upload Blob File
 	 *
-	 * @param {String} filename
-	 * @param {String} opts.container
+	 * @param {String} file - path to file
+	 * @param {String} [params.container]
+	 * @param {String} params.destination - without container name
+	 * @param {*} [params.data]
 	 */
-	uploadBlob (filename, opts = {}) {
+	uploadFile (source, params = {}) {
+		const container = params.container || this.defaultContainer
+		const blob = new Blob(source, {
+			container: container
+		})
+
+		// console.log(blob)
+		// const api = restMappings.blob.upload(filename)
+		const api =  {
+			method: 'PUT',
+			path: blob.fullPath,
+			headers: blob.headers,
+			data: blob.file.body
+		}
+
 		return new Promise((resolve, reject) => {
-			const container = opts.container || this.defaultContainer
-			const api = restMappings.blob.create(container)
 			this.client.request(api)
 				.then((res) => {
-					const blobs = res.data.EnumerationResults.Blobs.Blob
-					const data = blobs
-						? blobs
-						: res.data
-					resolve(data)
+					resolve({
+						...blob.getProperties(),
+						etag: res.headers.etag
+					})
 				})
 				.catch((err) => defaultErrorHandler(err, reject))
 		})
