@@ -1,6 +1,6 @@
 const fs = require('fs')
-const path = require('path')
 const crypto = require('crypto')
+const isBinaryPath = require('is-binary-path')
 
 /**
  * Object Blob
@@ -33,7 +33,11 @@ class Blob {
 	 * Reads a file synchronously, setting `data` and `md5` properties
 	 */
 	readSync () {
-		let body = fs.readFileSync(this.source).toString()
+		let data = fs.readFileSync(this.source)
+		let body = isBinaryPath(this.source)
+			? data
+			: data.toString()
+
 		this.md5 = contentMd5(body)
 		this.body = body
 	}
