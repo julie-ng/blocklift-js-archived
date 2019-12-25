@@ -17,7 +17,7 @@ function catchError (err, reject) {
 		? _formatError(err)
 		: err
 
-	reject({...response, _request: request })
+	reject({ ...response, _request: request })
 }
 
 /**
@@ -34,7 +34,7 @@ function _formatError (err) {
 	return {
 		status: err.response.status,
 		statusText: err.response.statusText,
-		headers: err.response.headers,
+		// headers: err.response.headers,
 		data: data
 	}
 }
