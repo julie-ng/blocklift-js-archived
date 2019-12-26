@@ -32,7 +32,7 @@
     "title": "Blocklift.js"
   },
   "styles": {
-    "text-color": "#1a1a1a",
+    "text-color": "#222",
     "secondary-color": "#5C2D91",
     "primary-color": "#0078D4",
     "heading-color": "var(--text-color)",
