@@ -77,6 +77,7 @@ function isAuthType (params, type) {
 	// console.log(`_isAuthType(params, ${type})`, params)
 	const requiredKeys = COMBINATIONS[type]
 	for (const i in requiredKeys) {
+		// eslint-disable-next-line no-prototype-builtins
 		if (!params.hasOwnProperty(requiredKeys[i])) {
 			return false
 		}
