@@ -1,7 +1,7 @@
 const BlockBlob = require('./block-blob')
-const HttpClient = require('./rest-api/client')
-const defaultErrorHandler = require('./rest-api/default-catch')
-const restMappings = require('./rest-api/mappings')
+const HttpClient = require('./http/client')
+const defaultErrorHandler = require('./http/responses/default-catch')
+const restMappings = require('./http/requests/mappings')
 
 /**
  * The Blocklift class is a wrapper around HTTP client, that formats raw Azure responses to be more developer friendly.

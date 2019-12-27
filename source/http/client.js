@@ -1,7 +1,7 @@
 const axios = require('axios')
 const chalk = require('chalk')
-const URLString = require('./url-string')
-const transformXML = require('./xml-helper')
+const URLString = require('./requests/url-string')
+const transformXML = require('./responses/xml-helper')
 
 const defaultConfig = {
 	// timeout in miliseconds

@@ -1,8 +1,8 @@
 const Blocklift = require('./blocklift')
-const HttpClient = require('./rest-api/client')
+const HttpClient = require('./http/client')
 
 const mockRequest = jest.fn()
-jest.mock('./rest-api/client', () => {
+jest.mock('./http/client', () => {
 	return jest.fn().mockImplementation(() => {
 		return { request: mockRequest }
 	})
