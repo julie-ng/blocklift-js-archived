@@ -164,16 +164,15 @@ class Blocklift {
 	 * @param {*} [params.data]
 	 */
 	uploadFile (source, params = {}) {
-		const container = params.container || this.defaultContainer
 		const blob = new BlockBlob(source, {
-			container: container
+			container: this.defaultContainer,
+			...params
 		})
 
-		// console.log(blob)
-		// const api = restMappings.blob.upload(filename)
+		// todo, move to mapping?
 		const api =  {
 			method: 'PUT',
-			path: blob.fullPath,
+			path: blob.pathname,
 			headers: blob.headers,
 			data: blob.file.body
 		}
@@ -182,7 +181,7 @@ class Blocklift {
 			this.client.request(api)
 				.then((res) => {
 					resolve({
-						...blob.getProperties(),
+						...blob.getProperties(), // todo add href
 						etag: res.headers.etag
 					})
 				})

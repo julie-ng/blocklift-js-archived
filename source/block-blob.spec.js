@@ -95,8 +95,8 @@ describe ('BlockBlob', () => {
 				})
 			})
 
-			it ('has a `fullPath` property, with name and container', () => {
-				expect(blob.fullPath).toEqual('mycontainer/mocks/files/hello.txt')
+			it ('has a `pathname` property, with name and container', () => {
+				expect(blob.pathname).toEqual('mycontainer/mocks/files/hello.txt')
 			})
 
 
@@ -105,7 +105,7 @@ describe ('BlockBlob', () => {
 					expect(blob.getProperties()).toEqual({
 						container: 'mycontainer',
 						path: 'mocks/files/hello.txt',
-						fullPath: 'mycontainer/mocks/files/hello.txt',
+						pathname: 'mycontainer/mocks/files/hello.txt',
 						contentType: 'text/plain',
 						md5: 'PXY7+q6AbRLNHH3mNQ99CA=='
 					})
