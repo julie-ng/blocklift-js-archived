@@ -33,8 +33,29 @@ const canonicalized = {
 		return str
 	},
 
-	resource: function () {
+	/**
+	 * Generates canonicalized resource string
+	 * requied for created signature for `Authorization` header
+	 *
+	 * @function resource
+	 * @param {String} urlString
+	 * @return {String} formatted canonicalized resource
+	 */
+	resource: function (urlString = '') {
+		let result = ''
+		const url = new URL(urlString)
 
+		// start with account name
+		const accountName = _extractAccountName(url.host)
+		result += `/${accountName}${url.pathname}\n`
+
+		// consolidate multiple properties
+		const mergedParams = _formatParams(url.searchParams)
+		for (const prop in mergedParams) {
+			result += prop + ':' + mergedParams[prop] + '\n'
+		}
+
+		return result.trimRight()
 	},
 }
 
@@ -55,6 +76,35 @@ function _extractMSHeaders (headers) {
 function _removeWhitespacesNotInsideQuotes (subj = '') {
 	const regex = /((\s{2,})|\t|\n)(?=([^"]*"[^"]*")*[^"]*$)/g
 	return subj.replace(regex, ' ')
+}
+
+function _extractAccountName (host) {
+	// return host.split('//')[1]
+	// 	.replace(/.blob.core.windows.net.*/, '')
+	return host
+		.replace(/.blob.core.windows.net.*/, '')
+		.replace('-secondary', '')
+}
+
+/**
+ *
+ * @param {URLSearchParams} searchParams
+ */
+function _formatParams (searchParams) {
+	// sort params
+	const sorted =  (Array.from(searchParams)).sort()
+
+	// now combine multiple properties
+	const merged = {}
+	sorted.forEach((p) => {
+		if (merged.hasOwnProperty(p[0])) {
+			merged[p[0]] += ',' + p[1]
+		} else {
+			merged[p[0]] = p[1]
+		}
+	})
+
+	return merged
 }
 
 module.exports = canonicalized
