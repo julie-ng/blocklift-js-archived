@@ -16,7 +16,7 @@
     "dev": "nodemon -w dev.js -w source --exec 'node dev.js'",
     "test:unit": "jest source --verbose",
     "test:unit:watch": "nodemon -w ./source --exec 'npm run test:unit'",
-    "test:integration": "jest integration",
+    "test:integration": "jest integration --no-coverage",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "lint:watch": "nodemon -w source -w tests -w mocks --exec 'npm run lint'",
