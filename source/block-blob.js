@@ -24,7 +24,7 @@ const textMimeTypes = {
  * @property {String} file.ext - full path with container and filename
  * @property {Buffer|String} file.body - full path with container and filename
  */
-class Blob {
+class BlockBlob {
 	/**
 	 *
 	 * @param {String} source - filename/path
@@ -36,7 +36,7 @@ class Blob {
 
 		// eslint-disable-next-line no-prototype-builtins
 		if (!opts.hasOwnProperty('container')) {
-			throw 'Blob: missing required `container` property'
+			throw 'BlockBlob: missing required `container` property'
 		}
 
 		this.headers = {
@@ -126,4 +126,4 @@ function _removeRelativePath (filepath) {
 		: newpath
 }
 
-module.exports = Blob
+module.exports = BlockBlob

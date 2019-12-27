@@ -1,11 +1,11 @@
 const fs = require('fs')
-const Blob = require('./blob')
+const BlockBlob = require('./block-blob')
 const isBinaryPath = require('is-binary-path')
 
 jest.mock('fs')
 jest.mock('is-binary-path')
 
-describe ('Blob', () => {
+describe ('BlockBlob', () => {
 	let blob
 	const opts = { container: 'container' }
 
@@ -13,13 +13,13 @@ describe ('Blob', () => {
 		beforeEach(() => {
 			fs.readFileSync.mockReturnValue('My content')
 			isBinaryPath.mockReturnValue(false)
-			blob = new Blob('hello.txt', opts)
+			blob = new BlockBlob('hello.txt', opts)
 		})
 
 		it ('throws if missing `container` param', () => {
 			expect(() => {
-				new Blob('file.txt')
-			}).toThrow('Blob: missing required `container` property')
+				new BlockBlob('file.txt')
+			}).toThrow('BlockBlob: missing required `container` property')
 		})
 
 		it ('sets default http Headers', () => {
@@ -33,8 +33,8 @@ describe ('Blob', () => {
 		})
 
 		it ('calls readSync() to set content based properties', () => {
-			const spy = jest.spyOn(Blob.prototype, 'readSync')
-			new Blob('foo.txt', opts)
+			const spy = jest.spyOn(BlockBlob.prototype, 'readSync')
+			new BlockBlob('foo.txt', opts)
 			expect(spy).toHaveBeenCalledTimes(1)
 			spy.mockRestore()
 		})
@@ -44,7 +44,7 @@ describe ('Blob', () => {
 		beforeEach(() => {
 			fs.readFileSync.mockReturnValue('My content')
 			isBinaryPath.mockReturnValue(false)
-			blob = new Blob('./../mocks/files/hello.txt', {
+			blob = new BlockBlob('./../mocks/files/hello.txt', {
 				container: 'mycontainer'
 			})
 		})
@@ -76,21 +76,21 @@ describe ('Blob', () => {
 				const source = 'a/b.txt'
 
 				it ('based on source param', () => {
-					let b = new Blob(source, opts)
+					let b = new BlockBlob(source, opts)
 					expect(b.path).toEqual('a/b.txt')
 				})
 
 				it ('also removes relative paths', () => {
-					let b = new Blob('./' + source, opts)
-					let c = new Blob('./../' + source, opts)
-					let d = new Blob('../' + source, opts)
+					let b = new BlockBlob('./' + source, opts)
+					let c = new BlockBlob('./../' + source, opts)
+					let d = new BlockBlob('../' + source, opts)
 					expect(b.path).toEqual('a/b.txt')
 					expect(c.path).toEqual('a/b.txt')
 					expect(d.path).toEqual('a/b.txt')
 				})
 
 				it ('also removes absolute path', () => {
-					let b = new Blob('/' + source, opts)
+					let b = new BlockBlob('/' + source, opts)
 					expect(b.path).toEqual('a/b.txt')
 				})
 			})
@@ -123,7 +123,7 @@ describe ('Blob', () => {
 				fs.readFileSync.mockReturnValue(binaryContent)
 				isBinaryPath.mockReturnValue(true)
 
-				imageBlob = new Blob('./../mocks/files/image.png', opts)
+				imageBlob = new BlockBlob('./../mocks/files/image.png', opts)
 			})
 
 			it ('has an image `contentType`', () => {

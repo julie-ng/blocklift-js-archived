@@ -1,4 +1,4 @@
-const Blob = require('./blob')
+const BlockBlob = require('./block-blob')
 const HttpClient = require('./rest-api/client')
 const defaultErrorHandler = require('./rest-api/default-catch')
 const restMappings = require('./rest-api/mappings')
@@ -165,7 +165,7 @@ class Blocklift {
 	 */
 	uploadFile (source, params = {}) {
 		const container = params.container || this.defaultContainer
-		const blob = new Blob(source, {
+		const blob = new BlockBlob(source, {
 			container: container
 		})
 
