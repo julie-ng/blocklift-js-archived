@@ -1,6 +1,6 @@
 const axios = require('axios')
 const chalk = require('chalk')
-const URL = require('./url')
+const URLString = require('./url-string')
 const transformXML = require('./xml-helper')
 
 const defaultConfig = {
@@ -71,7 +71,7 @@ class HttpClient {
 	 * @param {String|Object} api.params - optional params
 	 */
 	request (api) {
-		let url = new URL(api.path)
+		let url = new URLString(api.path)
 
 		if (api.params) {
 			url.append(api.params)

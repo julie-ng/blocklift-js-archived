@@ -3,7 +3,7 @@
  *
  * @property {String} url
  */
-class URL {
+class URLString {
 
 	/**
 	 * Constructor
@@ -55,4 +55,4 @@ function isPlainObject (obj) {
 	return Object.prototype.toString.call(obj) === '[object Object]'
 }
 
-module.exports = URL
+module.exports = URLString

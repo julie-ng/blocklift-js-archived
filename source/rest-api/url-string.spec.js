@@ -1,12 +1,12 @@
-const URL = require('./url')
+const URLString = require('./url-string')
 
-describe.only ('URL', () => {
+describe.only ('URLString', () => {
 	describe ('Constructor', () => {
 		it ('sets `url` property', () => {
-			let a = new URL('')
+			let a = new URLString('')
 			expect(a.url).toEqual('')
 
-			let b = new URL('helloW0rld%')
+			let b = new URLString('helloW0rld%')
 			expect(b.url).toEqual('helloW0rld%')
 		})
 	})
@@ -15,11 +15,11 @@ describe.only ('URL', () => {
 		let u
 
 		beforeEach (() => {
-			u = new URL('base')
+			u = new URLString('base')
 		})
 
 		it ('does not introduce extra `?`', () => {
-			let a = new URL('base?')
+			let a = new URLString('base?')
 			a.append('id=1')
 			expect(a.url).toEqual('base?id=1')
 		})
@@ -48,7 +48,7 @@ describe.only ('URL', () => {
 		})
 
 		it ('can add token', () => {
-			let a = new URL('?comp=list')
+			let a = new URLString('?comp=list')
 			a.append('a=b&c=d')
 			expect(a.url).toEqual('?comp=list&a=b&c=d')
 		})
