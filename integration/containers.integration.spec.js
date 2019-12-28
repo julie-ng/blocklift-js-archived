@@ -19,6 +19,7 @@ describe ('Integration Tests: Containers', () => {
 	})
 
 	it ('creates containers', (done) => {
+		expect.assertions(2)
 		return lift.createContainer(runId)
 			.then((data) => {
 				expect(data.containerName).toEqual(runId)
@@ -31,6 +32,7 @@ describe ('Integration Tests: Containers', () => {
 	})
 
 	it ('lists containers', (done) => {
+		expect.assertions(2)
 		return lift.listContainers()
 			.then((data) => {
 				expect(Array.isArray(data)).toBe(true)
@@ -43,6 +45,7 @@ describe ('Integration Tests: Containers', () => {
 	})
 
 	it ('deletes containers', (done) => {
+		expect.assertions(2)
 		return lift.deleteContainer(runId)
 			.then((data) => {
 				expect(data.containerName).toEqual(runId)
