@@ -52,19 +52,17 @@ class Blocklift {
 	 */
 	createContainer (name) {
 		name = name.toLowerCase()
-		return new Promise((resolve, reject) => {
-			const api = restMappings.container.create(name)
-			this.client.request(api)
-				.then((res) => {
-					resolve({
-						status: res.status,
-						statusText: res.statusText,
-						containerName: name,
-						headers: res.headers
-					})
-				})
-				.catch((err) => defaultErrorHandler(err, reject))
-		})
+		const api = restMappings.container.create(name)
+		return this.client.request(api)
+			.then((res) => {
+				return {
+					status: res.status,
+					statusText: res.statusText,
+					containerName: name,
+					headers: res.headers
+				}
+			})
+			.catch((err) => err ) // TODO: format again
 	}
 
 	/**
@@ -78,19 +76,16 @@ class Blocklift {
 
 	deleteContainer (name) {
 		// console.log(`deleteContainer(${name})`)
-
-		return new Promise((resolve, reject) => {
-			const api = restMappings.container.delete(name)
-			this.client.request(api)
-				.then((res) => {
-					resolve({
-						status: 202,
-						statusText: 'Accepted',
-						containerName: name
-					})
-				})
-				.catch((err) => defaultErrorHandler(err, reject))
-		})
+		const api = restMappings.container.delete(name)
+		return this.client.request(api)
+			.then((res) => {
+				return {
+					status: 202,
+					statusText: 'Accepted',
+					containerName: name
+				}
+			})
+			.catch((err) => err )
 	}
 
 	/**
@@ -105,24 +100,21 @@ class Blocklift {
 	 * @returns {Promise}
 	 */
 	listContainers () {
-		return new Promise((resolve, reject) => {
-			const api = restMappings.container.list()
+		const api = restMappings.container.list()
+		return this.client.request(api)
+			.then(function (res) {
+				let containers = res.data.EnumerationResults.Containers.Container
+				let data = (containers)
+					? containers
+					: res.data
 
-			this.client.request(api)
-				.then(function (res) {
-					let containers = res.data.EnumerationResults.Containers.Container
-					let data = (containers)
-						? containers
-						: res.data
-
-					// always return an Array
-					if (containers && !Array.isArray(data)) {
-						data = [data]
-					}
-					resolve(data)
-				})
-				.catch(err => defaultErrorHandler(err, reject))
-		})
+				// always return an Array
+				if (containers && !Array.isArray(data)) {
+					data = [data]
+				}
+				return data
+			})
+			.catch((err) => err )
 	}
 
 	// -------- Blobs --------
