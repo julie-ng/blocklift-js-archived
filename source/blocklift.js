@@ -168,17 +168,27 @@ class Blocklift {
 			headers: blob.headers,
 			data: blob.file.body
 		}
+		// console.log('api', api)
 
-		return new Promise((resolve, reject) => {
-			this.client.request(api)
-				.then((res) => {
-					resolve({
-						...blob.getProperties(), // todo add href
+		return this.client.request(api)
+			.then((res) => {
+				// console.log(res)
+				// console.log('res.data', res.data)
+				// let data = res.data
+				const data = {
+					blob: {
+						...blob.getProperties(),
 						etag: res.headers.etag
-					})
-				})
-				.catch((err) => defaultErrorHandler(err, reject))
-		})
+					},
+					response: {
+						status: res.status,
+						statusText: res.statusText,
+						headers: res.headers
+					}
+				}
+				return data
+			})
+			.catch((err) => err)
 	}
 }
 
