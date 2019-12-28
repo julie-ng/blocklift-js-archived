@@ -1,4 +1,5 @@
-const defaultMsVersion = '2019-02-02' // latest
+// const defaultMsVersion = '2019-02-02' // latest
+const utils = require('../../utils')
 
 /**
  * Canonical Helpers, uses for generating `Authorization` headers when using Access Keys.
@@ -97,7 +98,7 @@ function _formatParams (searchParams) {
 	// now combine multiple properties
 	const merged = {}
 	sorted.forEach((p) => {
-		if (merged.hasOwnProperty(p[0])) {
+		if (utils.hasProperty(merged, p[0])) {
 			merged[p[0]] += ',' + p[1]
 		} else {
 			merged[p[0]] = p[1]

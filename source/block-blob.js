@@ -2,7 +2,7 @@ const fs = require('fs')
 const crypto = require('crypto')
 const fileType = require('file-type')
 const isBinaryPath = require('is-binary-path')
-
+const utils = require('./utils')
 const textMimeTypes = {
 	txt: 'text/plain',
 	xml: 'text/xml',
@@ -35,8 +35,7 @@ class BlockBlob {
 	constructor (source, opts = {}) {
 		// console.log(`new Blob(${source})`, opts)
 
-		// eslint-disable-next-line no-prototype-builtins
-		if (!opts.hasOwnProperty('container')) {
+		if (!utils.hasProperty(opts, 'container')) {
 			throw 'BlockBlob: missing required `container` property'
 		}
 
@@ -47,7 +46,7 @@ class BlockBlob {
 
 		this.container = opts.container
 
-		this.path = opts.hasOwnProperty('target')
+		this.path = utils.hasProperty(opts, 'target')
 			? opts.target
 			: _removeRelativePath(source)
 
