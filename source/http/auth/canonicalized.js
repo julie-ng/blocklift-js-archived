@@ -21,6 +21,9 @@ const canonicalized = {
 	 * 'x-ms-date:Sat, 21 Feb 2015 00:48:38 GMT\nx-ms-version:2014-02-14\n'
 	 * ```
 	 *
+	 * For details, see official documentation here:
+	 * https://docs.microsoft.com/en-gb/rest/api/storageservices/authorize-with-shared-key#constructing-the-canonicalized-headers-string
+	 *
 	 * @function header
 	 * @param {Object} headers
 	 * @returns {String} formatted canonicalized header
