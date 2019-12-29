@@ -1,5 +1,5 @@
 const mappings = require('./container.mapping')
-const helpers = require('./mapping-spec.helpers')
+const helpers = require('./spec-helper')
 
 describe ('Container REST API Mappings', () => {
 	const requiredKeys = ['list', 'create', 'delete']

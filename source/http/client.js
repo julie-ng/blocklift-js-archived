@@ -4,7 +4,8 @@ const chalk = require('chalk')
 const _filterAxios = require('./responses/filter-axios.template')
 const _errorTemplate = require('./responses/error.template')
 
-const URLString = require('./requests/url-string')
+const SASToken = require('./auth/sas-token')
+const StorageRequest = require('./storage-request')
 const transformXML = require('./responses/xml-helper')
 
 const defaultConfig = {
@@ -21,6 +22,7 @@ const defaultConfig = {
  *
  * @private
  * @property {axios} axios - axios instance with preconfigured defaults used to make requests
+ * @property {String} account - Storage account name
  */
 class HttpClient {
 
@@ -28,7 +30,7 @@ class HttpClient {
 	 * Constructor
 	 *
 	 * Because of an axios bug that changes query param encoding, this custom client
-	 * just appends SAS token to end of a URL. This is a temporary compromise.
+	 * just appends SAS token as raw string to end of a URL.
 	 *
 	 * @param {Object} opts - options object
 	 * @param {String} opts.serviceUrl - Blob Storage service URL, any query params attached are assumed to be the SAS token.
@@ -36,19 +38,13 @@ class HttpClient {
 	 * @returns {HttpClient}
 	 */
 	constructor (opts = {}) {
-		let parts = opts.serviceUrl.split('?')
-		this.host = parts[0]
+		this.sasToken = SASToken.extractFromUrl(opts.serviceUrl)
 
-		if (parts[1].length > 0) {
-			this.sasToken = parts[1]
-		} else {
-			this.sasToken = false
-		}
-
+		const baseUrl = (new URL(opts.serviceUrl)).origin // + '/' // needs trailing slash?
 		// create axios instance that is returned
 		this.axios = axios.create({
 			...defaultConfig,
-			baseURL: this.host
+			baseURL: baseUrl
 		})
 
 		// request interceptors
@@ -67,43 +63,24 @@ class HttpClient {
 	}
 
 	/**
-	 * Makes HTTP Requests
+	 * Makes HTTP Requests against Azure API, returning JavaScript objects instead of XML strings.
 	 *
-	 * @param {Object} api - options object
-	 * @param {String} api.method - HTTP method, e.g. GET, PUT, DELETE
-	 * @param {String} api.url - HTTP url without host to send the request
-	 * @param {String|Object} api.params - optional params
+	 * @param {Object} opts - Object  with StorageRequest interface, i.e. includes `method`, `url`, `params`, `headers` and `data` properties.
+	 * @param {String} opts.url - required URL (without host)
+	 * @returns {Promise}	response frome server or error messages, with axios noise filtered out
 	 */
-	request (api) {
-		let url = new URLString(api.url)
-
-		if (api.params) {
-			url.append(api.params)
-		}
+	request (opts) {
+		// console.log('client.request()', opts)
+		const req = new StorageRequest(opts)
 
 		if (this.sasToken) {
-			url.append(this.sasToken)
+			req.append(this.sasToken)
 		}
-
-		// TODO
-		// Add necessary authorization headers
-
-		let opts = {
-			method: api.method,
-			url: url.url,
-			data: api.data || ''
-		}
-
-		if (api.headers) {
-			opts = {
-				...opts,
-				headers: api.headers
-			}
-		}
+		// TODO: Add necessary authorization for `SharedKey` headers
 
 		// Filter out axios noise from responses
 		return new Promise((resolve, reject) => {
-			this.axios.request(opts)
+			this.axios.request(req)
 				.then((response) => {
 					resolve(_filterAxios(response))
 				})
@@ -161,6 +138,5 @@ function logAllErrors (error) {
 	console.log(obj)
 	return Promise.reject(error)
 }
-
 
 module.exports = HttpClient

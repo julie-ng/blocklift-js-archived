@@ -14,6 +14,7 @@ const textMimeTypes = {
  * and reading properties and metadata including `Content-Type` and  MD5 hashes.
  * By default, `Blob` can handle both text files and binary files, e.g. images.
  *
+ * @private
  * @property {String} account - storage account name
  * @property {String} container - container name
  * @property {String} path - path name, which will be normalized, removing leading `/`, and releative paths, e.g. `./`, `../`, etc.
@@ -105,6 +106,11 @@ class BlockBlob {
 		}
 	}
 
+	/**
+	 * Aliases `getProperties()` instance method
+	 *
+	 * @returns {Object}
+	 */
 	template () {
 		return this.getProperties()
 	}
