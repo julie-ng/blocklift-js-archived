@@ -1,7 +1,8 @@
 const BlockBlob = require('./block-blob')
 const HttpClient = require('./http/client')
-const defaultErrorHandler = require('./http/responses/default-catch')
-const restMappings = require('./http/requests/mappings')
+
+const requestMappings = require('./http/api-mappings')
+const responseTemplates = require('./http/responses/templates')
 
 /**
  * The Blocklift class is a wrapper around HTTP client, that formats raw Azure responses to be more developer friendly.
@@ -9,7 +10,8 @@ const restMappings = require('./http/requests/mappings')
  *
  * For example list functions _always_ return `Array`s, even if there is only one result.
  *
- * @property {String} [defaultContainer] - when specified, this is always prepended to Blob operations.
+ * @property {String|Boolean} [defaultContainer] - when specified, this is always prepended to Blob operations. Set to `false` if not set.
+* @property {HttpClient} client - Http Cient used to make requests.
  */
 class Blocklift {
 
@@ -17,6 +19,7 @@ class Blocklift {
 	 * Constructor
 	 *
 	 * @param {String} opts.serviceUrl - Blob Service URL, which can be Shared Access Signature (SAS) Url
+	 * @param {String} [opts.defaultContainer] - default container to use for Blob operations.
 	 */
 	constructor (opts = {}) {
 		if (opts.serviceUrl === undefined) {
@@ -24,7 +27,6 @@ class Blocklift {
 		}
 
 		this.defaultContainer = opts.defaultContainer || false
-
 		this.client = new HttpClient(opts)
 	}
 
@@ -52,17 +54,15 @@ class Blocklift {
 	 */
 	createContainer (name) {
 		name = name.toLowerCase()
-		const api = restMappings.container.create(name)
+		const api = requestMappings.container.create(name)
 		return this.client.request(api)
 			.then((res) => {
 				return {
-					status: res.status,
-					statusText: res.statusText,
-					containerName: name,
-					headers: res.headers
+					...res,
+					containerName: name
 				}
 			})
-			.catch((err) => err ) // TODO: format again
+			.catch((err) => err) // TODO: format again?
 	}
 
 	/**
@@ -76,16 +76,15 @@ class Blocklift {
 
 	deleteContainer (name) {
 		// console.log(`deleteContainer(${name})`)
-		const api = restMappings.container.delete(name)
+		const api = requestMappings.container.delete(name)
 		return this.client.request(api)
 			.then((res) => {
 				return {
-					status: 202,
-					statusText: 'Accepted',
+					...res,
 					containerName: name
 				}
 			})
-			.catch((err) => err )
+			.catch((err) => err)
 	}
 
 	/**
@@ -100,21 +99,15 @@ class Blocklift {
 	 * @returns {Promise}
 	 */
 	listContainers () {
-		const api = restMappings.container.list()
+		const api = requestMappings.container.list()
 		return this.client.request(api)
 			.then(function (res) {
-				let containers = res.data.EnumerationResults.Containers.Container
-				let data = (containers)
-					? containers
-					: res.data
-
-				// always return an Array
-				if (containers && !Array.isArray(data)) {
-					data = [data]
+				return {
+					...res,
+					containers: responseTemplates.listContainers(res)
 				}
-				return data
 			})
-			.catch((err) => err )
+			.catch((err) => err)
 	}
 
 	// -------- Blobs --------
@@ -127,24 +120,18 @@ class Blocklift {
 	 * @return {Promise<Object>} Error
 	 */
 	listBlobs (containerName) {
-		return new Promise((resolve, reject) => {
-			const container = containerName || this.defaultContainer
-			const api = restMappings.blob.list(container)
-			this.client.request(api)
-				.then((res) => {
-					const blobs = res.data.EnumerationResults.Blobs.Blob
-					let data = blobs
-						? blobs
-						: res.data
+		const container = containerName || this.defaultContainer
+		const api = requestMappings.blob.list(container)
+		// console.log('api?', api)
 
-					// always return an Array
-					if (blobs && !Array.isArray(data)) {
-						data = [data]
-					}
-					resolve(data)
-				})
-				.catch((err) => defaultErrorHandler(err, reject))
-		})
+		return this.client.request(api)
+			.then((res) => {
+				return {
+					response: res,
+					blobs: responseTemplates.listBlobs(res)
+				}
+			})
+			.catch((err) => err)
 	}
 
 	/**
@@ -160,33 +147,22 @@ class Blocklift {
 			container: this.defaultContainer,
 			...params
 		})
-
-		// todo, move to mapping?
-		const api =  {
-			method: 'PUT',
-			path: blob.pathname,
+		const api = {
+			...requestMappings.blob.create(),
+			url: blob.url,
 			headers: blob.headers,
 			data: blob.file.body
 		}
-		// console.log('api', api)
 
 		return this.client.request(api)
 			.then((res) => {
-				// console.log(res)
-				// console.log('res.data', res.data)
-				// let data = res.data
-				const data = {
+				return {
 					blob: {
-						...blob.getProperties(),
+						...blob.template(),
 						etag: res.headers.etag
 					},
-					response: {
-						status: res.status,
-						statusText: res.statusText,
-						headers: res.headers
-					}
+					response: res
 				}
-				return data
 			})
 			.catch((err) => err)
 	}

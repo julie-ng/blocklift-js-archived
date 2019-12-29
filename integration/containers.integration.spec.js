@@ -21,9 +21,10 @@ describe ('Integration Tests: Containers', () => {
 	it ('creates containers', (done) => {
 		expect.assertions(2)
 		return lift.createContainer(runId)
-			.then((data) => {
-				expect(data.containerName).toEqual(runId)
-				expect(data.statusText).toEqual('Created')
+			.then((res) => {
+				// console.log('res', res)
+				expect(res.containerName).toEqual(runId)
+				expect(res.statusText).toEqual('Created')
 				done()
 			})
 			.catch((err) => {
@@ -34,9 +35,9 @@ describe ('Integration Tests: Containers', () => {
 	it ('lists containers', (done) => {
 		expect.assertions(2)
 		return lift.listContainers()
-			.then((data) => {
-				expect(Array.isArray(data)).toBe(true)
-				expect(data.find((c) => c.Name === runId)).not.toBe(undefined)
+			.then((res) => {
+				expect(Array.isArray(res.containers)).toBe(true)
+				expect(res.containers.find((c) => c.Name === runId)).not.toBe(undefined)
 				done()
 			})
 			.catch((err) => {
@@ -47,9 +48,10 @@ describe ('Integration Tests: Containers', () => {
 	it ('deletes containers', (done) => {
 		expect.assertions(2)
 		return lift.deleteContainer(runId)
-			.then((data) => {
-				expect(data.containerName).toEqual(runId)
-				expect(data.statusText).toEqual('Accepted')
+			.then((res) => {
+				// console.log('res', res)
+				expect(res.containerName).toEqual(runId)
+				expect(res.statusText).toEqual('Accepted')
 				done()
 			})
 			.catch((err) => {

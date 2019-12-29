@@ -1,9 +1,12 @@
+/**
+ * Note: `url` is relative.
+ */
 module.exports = {
 
 	list: function (container) {
 		return {
 			method: 'GET',
-			pathname: container,
+			url: container,
 			params: {
 				restype: 'container',
 				comp: 'list'
@@ -11,34 +14,34 @@ module.exports = {
 		}
 	},
 
-	create: function (account, blob) {
+	create: function (container, blob) {
 		return {
 			method: 'PUT',
-			pathname: account + '/' + blob
+			url: container + '/' + blob
 		}
 	},
 
-	delete: function (account, blob) {
+	delete: function (container, blob) {
 		return {
 			method: 'DELETE',
-			pathname: account + '/' + blob
+			url: container + '/' + blob
 		}
 	},
 
-	createSnapshot: function (account, blob, id) {
+	createSnapshot: function (container, blob, id) {
 		return {
 			method: 'PUT',
-			pathname: account + '/' + blob,
+			url: container + '/' + blob,
 			params: {
 				comp: 'snapshot'
 			}
 		}
 	},
 
-	deleteSnapshot: function (account, blob, id) {
+	deleteSnapshot: function (container, blob, id) {
 		return {
 			method: 'DELETE',
-			pathname: account + '/' + blob,
+			url: container + '/' + blob,
 			params: {
 				snapshot: id
 			}

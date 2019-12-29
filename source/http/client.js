@@ -1,5 +1,9 @@
 const axios = require('axios')
 const chalk = require('chalk')
+
+const _filterAxios = require('./responses/filter-axios.template')
+const _errorTemplate = require('./responses/error.template')
+
 const URLString = require('./requests/url-string')
 const transformXML = require('./responses/xml-helper')
 
@@ -67,11 +71,11 @@ class HttpClient {
 	 *
 	 * @param {Object} api - options object
 	 * @param {String} api.method - HTTP method, e.g. GET, PUT, DELETE
-	 * @param {String} api.path - HTTP path without host to send the request
+	 * @param {String} api.url - HTTP url without host to send the request
 	 * @param {String|Object} api.params - optional params
 	 */
 	request (api) {
-		let url = new URLString(api.path)
+		let url = new URLString(api.url)
 
 		if (api.params) {
 			url.append(api.params)
@@ -97,7 +101,16 @@ class HttpClient {
 			}
 		}
 
-		return this.axios.request(opts)
+		// Filter out axios noise from responses
+		return new Promise((resolve, reject) => {
+			this.axios.request(opts)
+				.then((response) => {
+					resolve(_filterAxios(response))
+				})
+				.catch((err) => {
+					reject(_errorTemplate(err))
+				})
+		})
 	}
 }
 
@@ -118,6 +131,8 @@ function logAllResponses (response) {
 	let req = response.request
 	let server = `${req.agent.protocol}//${req.connection.servername}`
 
+	// TODO: strip SAS signature from logs, params: ss, srt, sp, sig
+	// and replace with <redacted>
 	log(
 		req.method.toUpperCase()
 		+ ' '

@@ -3,7 +3,7 @@ module.exports = {
 	list: function () {
 		return {
 			method: 'GET',
-			pathname: '',
+			url: '',
 			params: {
 				comp: 'list'
 			}
@@ -13,7 +13,7 @@ module.exports = {
 	create: function (name) {
 		return {
 			method: 'PUT',
-			pathname: name,
+			url: name,
 			params: {
 				restype: 'container'
 			}
@@ -23,7 +23,7 @@ module.exports = {
 	delete: function (name) {
 		return {
 			method: 'DELETE',
-			pathname: name,
+			url: name,
 			params: {
 				restype: 'container'
 			}
