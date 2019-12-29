@@ -95,19 +95,5 @@ describe ('StorageURL', () => {
 				expect(StorageURL.getBlobpath(host + 'mycontainer/')).toBe(null)
 			})
 		})
-
-		describe ('getSasToken()', () => {
-			const baseUrl = 'https://foo.blob.core.windows.net/mycontainer?'
-			const token = 'sv=2019-02-02&ss=bfqt&srt=sco&sp=rwdlacup&se=2019-12-29T03:23:39Z&st=2019-12-28T19:23:39Z&spr=https&sig=kxwGj9aHhWAeRqVEXw5kbG%2F5AP%2BqtN78cYyyERf0tlU%3D'
-
-			it ('extracts token from query param', () => {
-				expect(StorageURL.getSasToken(baseUrl + token)).toEqual(token)
-			})
-
-			it ('and ignores non-token params', () => {
-				expect(StorageURL.getSasToken(baseUrl + 'foo=bar&' + token + '&comp=list')).toEqual(token)
-				expect(StorageURL.getSasToken(baseUrl + token + '&comp=list')).toEqual(token)
-			})
-		})
 	})
 })

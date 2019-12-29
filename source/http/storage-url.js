@@ -1,4 +1,5 @@
 const sasParams = require('./auth/sas-params')
+const SASToken = require('./auth/sas-token')
 
 class StorageURL {
 
@@ -57,32 +58,6 @@ class StorageURL {
 		return (dirs.length >= 3 && dirs[2] !== '')
 			? dirs[2]
 			: null
-	}
-
-	static getSasToken (fromUrl) {
-		const url = new URL(fromUrl)
-		// console.log(url.searchParams)
-
-		// Custom Regex to manually extract signature search param
-		// `URLSearchParams.toString()` de/encodes strings, which Azure API considers malformed.
-		const sig = /(?<=sig=)([A-Za-z0-9%]+)/
-
-
-		let token = ''
-		for (const i in sasParams) {
-			const key = sasParams[i]
-			if (url.searchParams.get(key) === null) { return null }
-
-			token += (key === 'sig')
-				? 'sig=' + url.search.match(sig)[0] + '&' // signature as raw string
-				: `${key}=` + url.searchParams.get(key) + '&'
-		}
-
-		if (token.endsWith('&')) {
-			token = token.slice(0, -1)
-		}
-
-		return token
 	}
 }
 

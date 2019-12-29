@@ -1,10 +1,35 @@
-module.exports = [
+const required = [
 	'sv',
-	'ss',
-	'srt',
-	'sp',
+	// 'sr',
 	'se',
-	'st',
-	'spr',
+	'sp',
 	'sig'
 ]
+
+const optional = [
+	'ss',
+	'srt',
+	'sr',
+	'st',
+	'spr',
+	'sip',
+	'si'
+]
+
+function allParams () {
+	const all = {}
+	required.forEach(r => {
+		all[r] = { required: true }
+	})
+
+	optional.forEach(o => {
+		all[o] = { required: false }
+	})
+	return all
+}
+
+module.exports = {
+	required: required,
+	optional: optional,
+	all: allParams()
+}
