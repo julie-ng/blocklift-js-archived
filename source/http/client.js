@@ -1,19 +1,16 @@
 const axios = require('axios')
 const chalk = require('chalk')
 
-const _filterAxios = require('./responses/filter-axios.template')
-const _errorTemplate = require('./responses/error.template')
-
 const SASToken = require('./auth/sas-token')
-const StorageRequest = require('./storage-request')
-const transformXML = require('./responses/xml-helper')
+const StorageRequest = require('./request/storage-request')
+const templates = require('./response/templates')
 
 const defaultConfig = {
 	// timeout in miliseconds
 	timeout: 10000,
 
 	// Azure returns XML but we want JavaScript Objects
-	transformResponse: [transformXML]
+	transformResponse: [templates.transformXML]
 }
 
 /**
@@ -82,10 +79,10 @@ class HttpClient {
 		return new Promise((resolve, reject) => {
 			this.axios.request(req)
 				.then((response) => {
-					resolve(_filterAxios(response))
+					resolve(templates.axiosResponse(response))
 				})
 				.catch((err) => {
-					reject(_errorTemplate(err))
+					reject(templates.error(err))
 				})
 		})
 	}

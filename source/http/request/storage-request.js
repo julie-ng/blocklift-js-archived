@@ -1,4 +1,4 @@
-const utils = require('../utils')
+const utils = require('../../utils')
 
 /**
  * Encapsulates Azure specific requirements of REST API

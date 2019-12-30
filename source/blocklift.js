@@ -2,7 +2,7 @@ const BlockBlob = require('./block-blob')
 const HttpClient = require('./http/client')
 
 const requestMappings = require('./http/api-mappings')
-const responseTemplates = require('./http/responses/templates')
+const responseTemplates = require('./http/response/templates')
 
 /**
  * The Blocklift class is a wrapper around HTTP client, that formats raw Azure responses to be more developer friendly.
