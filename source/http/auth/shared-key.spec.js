@@ -4,7 +4,7 @@ describe ('SharedKey', () => {
 	describe ('Constructor', () => {
 		it ('has a constructor', () => {
 			expect(() => {
-				new SharedKey()
+				new SharedKey('accountname')
 			}).not.toThrow()
 		})
 	})

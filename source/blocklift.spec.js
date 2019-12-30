@@ -48,7 +48,7 @@ describe ('Blocklift', () => {
 				const mockResponse = { data: containersMocks.obj.list }
 				lift.client.request.mockImplementationOnce(() => Promise.resolve(mockResponse))
 				return lift.listContainers().then((data)=> {
-					expect(data).toEqual(containersMocks.parsed.list)
+					expect(data.containers).toEqual(containersMocks.parsed.list)
 					done()
 				})
 			})
@@ -57,7 +57,7 @@ describe ('Blocklift', () => {
 				const mockResponse = { data: containersMocks.obj.single }
 				lift.client.request.mockImplementationOnce(() => Promise.resolve(mockResponse))
 				return lift.listContainers().then((data)=> {
-					expect(data).toEqual([containersMocks.parsed.single])
+					expect(data.containers).toEqual([containersMocks.parsed.single])
 					done()
 				})
 			})

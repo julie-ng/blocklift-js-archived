@@ -6,8 +6,8 @@
  * @param {String} prop - property to check for
  * @return {Boolean}
  */
-function hasOwnProperty (obj, prop) {
-	Object.prototype.hasOwnProperty.call(obj, prop)
+function hasProperty (obj, prop) {
+	return Object.prototype.hasOwnProperty.call(obj, prop)
 }
 
-module.exports = hasOwnProperty
+module.exports = hasProperty

@@ -14,10 +14,11 @@ const textMimeTypes = {
  * and reading properties and metadata including `Content-Type` and  MD5 hashes.
  * By default, `Blob` can handle both text files and binary files, e.g. images.
  *
+ * @private
  * @property {String} account - storage account name
  * @property {String} container - container name
  * @property {String} path - path name, which will be normalized, removing leading `/`, and releative paths, e.g. `./`, `../`, etc.
- * @property {String} pathname - combined container and path name
+ * @property {String} url - combined container and path name
  * @property {String} contentType - full path with container and filename
  * @property {String} md5 - base64 encoded md5 hash of content used for validating file integrity after transport
  * @property {Object} file - full path with container and filename
@@ -50,7 +51,7 @@ class BlockBlob {
 			? opts.target
 			: _removeRelativePath(source)
 
-		this.pathname = this.container + '/' + this.path
+		this.url = this.container + '/' + this.path
 
 		this.file = {
 			name: _getFilename(source),
@@ -98,11 +99,20 @@ class BlockBlob {
 		return {
 			container: this.container,
 			path: this.path,
-			pathname: this.pathname,
+			url: this.url,
 			// href: `https://{this.account}.blob.core.windows.net/`,
 			contentType: this.contentType,
 			md5: this.md5
 		}
+	}
+
+	/**
+	 * Aliases `getProperties()` instance method
+	 *
+	 * @returns {Object}
+	 */
+	template () {
+		return this.getProperties()
 	}
 }
 

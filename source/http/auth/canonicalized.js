@@ -2,7 +2,9 @@
 const utils = require('../../utils')
 
 /**
- * Canonical Helpers, uses for generating `Authorization` headers when using Access Keys.
+ * Canonical Helpers, uses for generating `Authorization` headers when using Access Keys
+ * as per [official Azure documentation](
+	 * https://docs.microsoft.com/en-gb/rest/api/storageservices/authorize-with-shared-key#constructing-the-canonicalized-headers-string).
  *
  * @module canonicalized
  */
@@ -20,6 +22,9 @@ const canonicalized = {
 	 * ```
 	 * 'x-ms-date:Sat, 21 Feb 2015 00:48:38 GMT\nx-ms-version:2014-02-14\n'
 	 * ```
+	 *
+	 * For details, see [official Azure documentation](
+	 * https://docs.microsoft.com/en-gb/rest/api/storageservices/authorize-with-shared-key#constructing-the-canonicalized-headers-string).
 	 *
 	 * @function header
 	 * @param {Object} headers
@@ -88,7 +93,7 @@ function _extractAccountName (host) {
 }
 
 /**
- *
+ * @private
  * @param {URLSearchParams} searchParams
  */
 function _formatParams (searchParams) {
