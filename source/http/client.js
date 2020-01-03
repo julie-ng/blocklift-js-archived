@@ -102,17 +102,17 @@ function logAllResponses (response) {
 	metadata.endTime = new Date()
 	response.duration = metadata.endTime - metadata.startTime
 
-	let req = response.request
-	let server = `${req.agent.protocol}//${req.connection.servername}`
+	const req = response.request
+	const server = `${req.agent.protocol}/${req.connection.servername}`
+	const token = SASToken.extractFromUrl(server + req.path)
+	const path = req.path.replace(token, 'sasToken=<redacted>')
 
-	// TODO: strip SAS signature from logs, params: ss, srt, sp, sig
-	// and replace with <redacted>
 	log(
 		req.method.toUpperCase()
 		+ ' '
 		+ server
-		+ req.path
-		+ ' ' + chalk.green(response.status) + ', ' + `${response.duration} ms`
+		+ path
+		+ ' - ' + chalk.green(response.status) + ', ' + `${response.duration} ms`
 	)
 	return response
 }
