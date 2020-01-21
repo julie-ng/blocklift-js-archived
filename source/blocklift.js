@@ -22,9 +22,14 @@ class Blocklift {
 	 * @param {String} [opts.defaultContainer] - default container to use for Blob operations.
 	 */
 	constructor (opts = {}) {
-		if (opts.serviceUrl === undefined) {
-			throw '`serviceUrl` required'
+		if (opts.account && opts.accessKey) {
+			console.log('got access key')
+
 		}
+
+		// if (opts.serviceUrl === undefined) {
+		// 	throw '`serviceUrl` required'
+		// }
 
 		this.defaultContainer = opts.defaultContainer || false
 		this.client = new HttpClient(opts)

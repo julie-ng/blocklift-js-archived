@@ -2,6 +2,7 @@ const axios = require('axios')
 const chalk = require('chalk')
 
 const SASToken = require('./auth/sas-token')
+const SharedKey = require('./auth/shared-key')
 const StorageRequest = require('./request/storage-request')
 const templates = require('./response/templates')
 
@@ -35,9 +36,16 @@ class HttpClient {
 	 * @returns {HttpClient}
 	 */
 	constructor (opts = {}) {
-		this.sasToken = SASToken.extractFromUrl(opts.serviceUrl)
+		if (opts.serviceUrl) {
+			this.sasToken = SASToken.extractFromUrl(opts.serviceUrl)
+		}
 
-		const baseUrl = (new URL(opts.serviceUrl)).origin // + '/' // needs trailing slash?
+		if (opts.account) {
+			this.sharedKey = new SharedKey(opts.account)
+		}
+
+		// const baseUrl = (new URL(opts.serviceUrl)).origin // + '/' // needs trailing slash?
+		const baseUrl = 'https://blockliftjsintegration.blob.core.windows.net'
 		// create axios instance that is returned
 		this.axios = axios.create({
 			...defaultConfig,
@@ -67,8 +75,20 @@ class HttpClient {
 	 * @returns {Promise}	response frome server or error messages, with axios noise filtered out
 	 */
 	request (opts) {
-		// console.log('client.request()', opts)
+		console.log('client.request()', opts)
 		const req = new StorageRequest(opts)
+		console.log('req', req.headers)
+
+		const url = 'https://blockliftjsintegration.blob.core.windows.net/' + req.url
+
+
+		const key = this.sharedKey.generate(opts.method, req.headers, url)
+		console.log('** sharedKey **')
+		console.log(key)
+		req.headers = {
+			...req.headers,
+			'Authorization': key
+		}
 
 		if (this.sasToken) {
 			req.append(this.sasToken)
@@ -93,6 +113,8 @@ const log = function (msg) {
 }
 
 function addRequestStartTime (config) {
+	console.log('addRequestSTartTime', config)
+
 	config.metadata = { startTime: new Date() }
 	return config
 }
@@ -129,6 +151,7 @@ function logAllErrors (error) {
 		statusText: error.response.statusText,
 		request: {
 			method: error.request.method,
+			// headers: error.request.headers,
 			path: error.request.path
 		}
 	}

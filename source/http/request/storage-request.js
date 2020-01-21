@@ -57,6 +57,11 @@ class StorageRequest {
 		this.method = req.method || 'GET'
 		this.params = req.params || {}
 		this.headers = req.headers || {}
+		this.headers = {
+			...this.headers,
+			'x-ms-version': '2015-02-21'
+			// 'x-ms-date': (new Date()).toUTCString()
+		}
 		this.data = req.data || ''
 
 		return this

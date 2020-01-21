@@ -14,6 +14,9 @@
   "private": true,
   "scripts": {
     "dev": "nodemon -w dev.js -w source --exec 'node dev.js'",
+    "integration-test": "nodemon -w source -w integration --exec 'jest --no-coverage integration/*.integration.spec.js'",
+    "dev-test": "nodemon -w source -w integration --exec 'jest --no-coverage source/http/auth/shared-key.spec.js'",
+    "test": "npm run test:unit && npm run test:integration",
     "test:unit": "jest source --verbose",
     "test:unit:watch": "nodemon -w ./source --exec 'npm run test:unit'",
     "test:integration": "jest integration --no-coverage",
