@@ -2,7 +2,7 @@ require('dotenv').config()
 const crypto = require('crypto')
 const canonicalized = require('./canonicalized')
 const utils = require('../../utils')
-const accountKey = process.env.BLOB_ACCOUNT_KEY
+const BLOB_ACCOUNT_KEY = process.env.BLOB_ACCOUNT_KEY
 
 /**
  * Generates signature strings for authorization
@@ -31,22 +31,13 @@ class SharedKey {
 	 * @return {String} - signature
 	 */
 	generate (method, headers, url) {
-		const str = _signatureTemplate(method, headers, url)
+		const str 	 		= _signatureTemplate(method, headers, url)
+		const toSign 		= Buffer.from(str, 'utf8')
+		const key 			= Buffer.from(BLOB_ACCOUNT_KEY, 'base64')
+		const signature = crypto.createHmac('sha256', key)
+			.update(toSign)
+			.digest('base64')
 
-		// console.log('str')
-		// console.log(str)
-
-		const utf8String = (new Buffer(str)).toString('utf8')
-
-		// const utf8String = `GET
-
-
-		// const utf8String = "GET\n\n\n\n\n\n\n\n\n\n\n\nx-ms-date:Fri, 26 Jun 2015 23:39:12 GMT\nx-ms-version:2015-02-21\n/myaccount/mycontainer\ncomp:metadata\nrestype:container\ntimeout:20"
-
-		const decodedKey = (new Buffer(accountKey, 'base64')).toString('utf8')
-		const hmac = crypto.createHmac('sha256', decodedKey)
-		// Signature=Base64(HMAC-SHA256(UTF8(StringToSign), Base64.decode(<your_azure_storage_account_shared_key>)))
-		const signature = hmac.update(utf8String).digest('base64')
 		return `SharedKey ${this.account}:${signature}`
 	}
 }
@@ -68,7 +59,7 @@ const _signatureHeaders = [
 ]
 
 const _signatureTemplate = function (method, headers, url) {
-	console.log('_signatureTemplate()', method, url, headers)
+	// console.log('_signatureTemplate()', method, url, headers)
 
 	// This part of signature is based on headers.
 	// The following are optional ones that can be empty.
@@ -76,7 +67,6 @@ const _signatureTemplate = function (method, headers, url) {
 	// "Where there is no header value, the new-line character only is specified."
 
 	let result = method.toUpperCase() + '\n'
-
 	_signatureHeaders.forEach((h) => {
 		result += _appendSignature(headers, h)
 	})
@@ -85,7 +75,6 @@ const _signatureTemplate = function (method, headers, url) {
 	result += canonicalized.resource(url)
 	return result
 }
-
 
 const _appendSignature = function (params, prop) {
 	// console.log('_appendSignature()', prop, params)

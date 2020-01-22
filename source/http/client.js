@@ -83,8 +83,8 @@ class HttpClient {
 
 
 		const key = this.sharedKey.generate(opts.method, req.headers, url)
-		console.log('** sharedKey **')
-		console.log(key)
+		// console.log('** sharedKey **')
+		// console.log(key)
 		req.headers = {
 			...req.headers,
 			'Authorization': key

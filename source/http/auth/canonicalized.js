@@ -31,11 +31,13 @@ const canonicalized = {
 	 * @returns {String} formatted canonicalized header
 	 */
 	header: function (headers = {}) {
-		const msHeaders = _extractMSHeaders(headers)
+		let msHeaders = _sortByKeys(_extractMSHeaders(headers))
 		let str = ''
 		for (const k in msHeaders) {
 			str += `${k}:${msHeaders[k]}\n`
 		}
+
+		// str.trimRight() // remove last newline
 		return str
 	},
 
@@ -51,7 +53,7 @@ const canonicalized = {
 		let result = ''
 		const url = new URL(urlString)
 
-		// start with account name
+		// url.pathname = (url.pathname === '/') ? '' : url.pathname
 		const accountName = _extractAccountName(url.host)
 		result += `/${accountName}${url.pathname}\n`
 
@@ -111,6 +113,17 @@ function _formatParams (searchParams) {
 	})
 
 	return merged
+}
+
+function _sortByKeys (obj) {
+	let keys = Object.keys(obj).sort()
+	let sorted = {}
+
+	keys.forEach((k) => {
+		sorted[k] = obj[k]
+	})
+
+	return sorted
 }
 
 module.exports = canonicalized

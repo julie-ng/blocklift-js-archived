@@ -1,5 +1,9 @@
 const StorageRequest = require('./storage-request')
 
+const baseHeaders = {
+	'x-ms-version': '2015-02-21'
+}
+
 describe ('StorageRequest', () => {
 	const requiredParams = {
 		url: '/foo'
@@ -28,8 +32,8 @@ describe ('StorageRequest', () => {
 				expect(defaultRequest.method).toEqual('GET')
 			})
 
-			it ('defaults `headers` to empty obj', () => {
-				expect(defaultRequest.headers).toEqual({})
+			it ('defaults `headers` to just base headers', () => {
+				expect(defaultRequest.headers).toEqual({ ...baseHeaders })
 			})
 
 			it ('defaults `params` to empty obj', () => {
@@ -56,7 +60,7 @@ describe ('StorageRequest', () => {
 					foo: 'bar'
 				}
 			})
-			expect(s.headers).toEqual({ foo: 'bar' })
+			expect(s.headers).toEqual({ ...baseHeaders, foo: 'bar' })
 		})
 
 		it ('accepts `params` params', () => {
@@ -94,9 +98,10 @@ describe ('StorageRequest', () => {
 				const hdr = {
 					'Accepts': 'application/json'
 				}
-				expect(s.headers).toEqual({})
+				expect(s.headers).toEqual({ ...baseHeaders })
 				s.addHeader(hdr)
-				expect(s.headers).toEqual(hdr)
+				const merged = Object.assign({}, baseHeaders, hdr)
+				expect(s.headers).toEqual(merged)
 			})
 
 			it ('returns self to be chainable', () => {
